@@ -38,3 +38,9 @@ end
 function ToRemoveSectionName:text()
     return self:element().text
 end
+
+---@public
+---@param text string
+function ToRemoveSectionName:setText(text)
+    self:element().text = text
+end

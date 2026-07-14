@@ -36,3 +36,9 @@ end
 function SectionNameUnlocked:text()
     return self:element().text
 end
+
+---@public
+---@param text string
+function SectionNameUnlocked:setText(text)
+    self:element().text = text
+end

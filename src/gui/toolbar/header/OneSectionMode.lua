@@ -33,6 +33,12 @@ function OneSectionMode:toggled()
     return self:element().toggled
 end
 
+---@public
+---@param value boolean
+function OneSectionMode:setToggled(value)
+    self:element().toggled = value
+end
+
 function OneSectionMode:lock()
     self:hide()
 end

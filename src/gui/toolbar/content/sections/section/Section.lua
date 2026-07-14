@@ -82,6 +82,39 @@ function Section:name()
     return self:header():name()
 end
 
+---@public
+---@param name string
+function Section:setName(name)
+    self:header():setName(name)
+end
+
+---@public
+---@return table
+function Section:exportState()
+    return {
+        name = self:name(),
+        collapsed = not self:content():isVisible(),
+        items = self:content():table():exportItems()
+    }
+end
+
+---@public
+---@param state table
+function Section:applyState(state)
+    if type(state) ~= "table" then
+        return
+    end
+    if type(state.name) == "string" and state.name ~= "" then
+        self:setName(state.name)
+    end
+    if type(state.items) == "table" then
+        self:content():table():applyItems(state.items)
+    end
+    if state.collapsed then
+        self:collapse()
+    end
+end
+
 ---@private
 ---@return SectionHeader
 function Section:header()

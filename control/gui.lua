@@ -3,6 +3,7 @@ import("factorio.events.gui.ElementChanged")
 import("factorio.events.gui.ElementLocationChanged")
 import("factorio.events.gui.Hovered")
 import("factorio.events.gui.Left")
+import("gui.ClipboardDialog")
 
 ---@param event EventData
 script.on_event(defines.events.on_player_created, function(event)
@@ -26,6 +27,7 @@ end)
 
 ---@param event EventData
 script.on_event(defines.events.on_gui_closed, function(event)
+    ClipboardDialog.handleClosed(event)
     if event.gui_type == defines.gui_type.entity and event.entity.name == "locomotive" then
         Player.get(event.player_index):showToolbars()
     end
@@ -33,6 +35,11 @@ end)
 
 ---@param event EventData
 script.on_event(defines.events.on_gui_click, function(event)
+    if event.element and event.element.valid and event.element.tags.toolbarsModClipboardAction then
+        ClipboardDialog.handleClick(event)
+        return
+    end
+
     local click = Click.new(event)
     if click:isForModElement() then
         Player.get(event.player_index):gui():handleClick(click)

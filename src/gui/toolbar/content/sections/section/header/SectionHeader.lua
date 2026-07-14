@@ -111,3 +111,12 @@ end
 function SectionHeader:name()
     return (self:child(ToRemoveSectionName) or self:child(SectionNameUnlocked) or self:child(SectionNameLocked)):text()
 end
+
+---@public
+---@param name string
+function SectionHeader:setName(name)
+    local nameComponent = self:child(ToRemoveSectionName) or self:child(SectionNameUnlocked) or self:child(SectionNameLocked)
+    if nameComponent then
+        nameComponent:setText(name)
+    end
+end

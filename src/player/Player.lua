@@ -2,6 +2,7 @@ import("EventBus")
 import("Scheduler")
 import("factorio.events.general.ControllerChanged")
 import("factorio.events.general.SurfaceChanged")
+import("gui.ClipboardDialog")
 import("gui.Gui")
 import("player.Cursor")
 import("player.Display")
@@ -113,6 +114,16 @@ end
 ---@public
 function Player:createToolbar()
     self._gui:createToolbar()
+end
+
+---@public
+function Player:exportAllToolbars()
+    ClipboardDialog.showExport(self:luaPlayer(), self._gui:exportToolbarsJson(), "Export all toolbars")
+end
+
+---@public
+function Player:importAllToolbars()
+    ClipboardDialog.showImportAllToolbars(self:luaPlayer(), self._gui)
 end
 
 ---@public

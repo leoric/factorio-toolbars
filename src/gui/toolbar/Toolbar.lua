@@ -3,10 +3,14 @@ import("gui.Box")
 import("gui.Window")
 import("gui.toolbar.Strut")
 import("gui.toolbar.header.ToolbarHeader")
+import("gui.toolbar.header.OneSectionMode")
 import("gui.toolbar.content.ToolbarContent")
 import("gui.toolbar.content.sections.Sections")
 import("gui.toolbar.content.sections.section.Section")
 import("gui.toolbar.content.sections.section.content.table.Table")
+import("gui.toolbar.content.sections.section.content.table.slots.empty.EmptySlot")
+import("gui.toolbar.content.sections.section.content.table.slots.item.ItemSlot")
+import("Item")
 import("player.events.ToolbarsToggled")
 
 ---@class Toolbar : Window
@@ -238,6 +242,126 @@ function Toolbar:tables()
         table.insert(tables, section:content():table())
     end
     return tables
+end
+
+---@public
+---@return string
+function Toolbar:exportItemsJson()
+    return helpers.table_to_json({ items = self:exportedItems() })
+end
+
+---@public
+---@param jsonText string
+function Toolbar:importItemsFromJson(jsonText)
+    local success, decoded = pcall(helpers.json_to_table, jsonText)
+    if not success or type(decoded) ~= "table" or type(decoded.items) ~= "table" then
+        return
+    end
+    self:importItems(decoded.items)
+end
+
+---@private
+---@return ItemIDAndQualityIDPair[]
+function Toolbar:exportedItems()
+    local items = {}
+    for _, toolbarTable in ipairs(self:tables()) do
+        for _, slot in ipairs(toolbarTable:slots()) do
+            if slot:isInstanceOf(ItemSlot) then
+                table.insert(items, slot:item():nameQualityPair())
+            end
+        end
+    end
+    return items
+end
+
+---@private
+---@param items table
+function Toolbar:importItems(items)
+    local emptySlots = self:emptySlots()
+    local slotIndex = 1
+    for _, itemData in ipairs(items) do
+        if slotIndex > #emptySlots then
+            break
+        end
+        local item = Item.fromData(itemData)
+        if item then
+            emptySlots[slotIndex]:fillWithItem(item)
+            slotIndex = slotIndex + 1
+        end
+    end
+end
+
+---@private
+---@return EmptySlot[]
+function Toolbar:emptySlots()
+    local emptySlots = {}
+    for _, toolbarTable in ipairs(self:tables()) do
+        for _, slot in ipairs(toolbarTable:slots()) do
+            if slot:isInstanceOf(EmptySlot) then
+                table.insert(emptySlots, slot)
+            end
+        end
+    end
+    return emptySlots
+end
+
+---@public
+---@return table
+function Toolbar:exportState()
+    local sections = {}
+    for _, section in ipairs(self:content():sections():sections()) do
+        table.insert(sections, section:exportState())
+    end
+    return {
+        x = self:element().location.x,
+        y = self:element().location.y,
+        locked = self:isLocked(),
+        alignedTop = self:isAlignedTop(),
+        oneSectionMode = self:header():child(OneSectionMode):toggled(),
+        headerVisible = self:header():isVisible(),
+        sections = sections
+    }
+end
+
+---@public
+---@param state table
+function Toolbar:applyState(state)
+    if type(state) ~= "table" then
+        return
+    end
+
+    local sections = type(state.sections) == "table" and state.sections or {}
+    for _ = 2, #sections do
+        self:addSection()
+    end
+
+    local sectionComponents = self:content():sections():sections()
+    for i, sectionState in ipairs(sections) do
+        if sectionComponents[i] then
+            sectionComponents[i]:applyState(sectionState)
+        end
+    end
+    self:tableChanged()
+
+    if state.alignedTop == false then
+        self:alignBottom()
+    end
+
+    if type(state.oneSectionMode) == "boolean" then
+        self:header():child(OneSectionMode):setToggled(state.oneSectionMode)
+    end
+
+    if state.headerVisible == false then
+        self:header():hide()
+    end
+
+    if type(state.x) == "number" and type(state.y) == "number" then
+        self:setLocation({ x = state.x, y = state.y })
+    end
+
+    if state.locked then
+        self:lock()
+    end
 end
 
 ---@private

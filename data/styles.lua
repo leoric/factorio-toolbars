@@ -156,6 +156,17 @@ styles.toolbar_header_one_section_mode = {
     right_margin = 1
 }
 
+styles.toolbar_header_import = {
+    type = "button_style",
+    parent = "toolbar_button_icon_black"
+}
+
+styles.toolbar_header_export = {
+    type = "button_style",
+    parent = "toolbar_button_icon_black",
+    right_margin = 1
+}
+
 styles.toolbar_header_collapse = {
     type = "button_style",
     parent = "toolbar_button_icon_black"

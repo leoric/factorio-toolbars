@@ -2,6 +2,9 @@ import("gui.Sized")
 import("gui.Box")
 import("gui.toolbar.content.sections.section.content.table.Row")
 import("gui.toolbar.content.sections.section.content.table.Slot")
+import("gui.toolbar.content.sections.section.content.table.slots.empty.EmptySlot")
+import("gui.toolbar.content.sections.section.content.table.slots.item.ItemSlot")
+import("Item")
 
 ---@class Table : Sized
 ---@field private _toolbar Toolbar
@@ -184,6 +187,60 @@ end
 ---@return number
 function Table:rowsCount()
     return #self:rows()
+end
+
+---@public
+---@return Slot[]
+function Table:slots()
+    local slots = {}
+    for _, row in ipairs(self:rows()) do
+        for _, slot in ipairs(row:children()) do
+            table.insert(slots, slot)
+        end
+    end
+    return slots
+end
+
+---@public
+---@return table[] list of {row: number, col: number, name: string, quality: string}
+function Table:exportItems()
+    local items = {}
+    for _, row in ipairs(self:rows()) do
+        for _, slot in ipairs(row:children()) do
+            if slot:isInstanceOf(ItemSlot) then
+                local pair = slot:item():nameQualityPair()
+                table.insert(items, { row = row:index(), col = slot:index(), name = pair.name, quality = pair.quality })
+            end
+        end
+    end
+    return items
+end
+
+---Fills the slots at the given row/col positions, growing the grid as needed.
+---Does not trigger a resize itself; call the owning Toolbar's tableChanged()
+---once after applying items to every table, to avoid premature trimming.
+---@public
+---@param items table[]
+function Table:applyItems(items)
+    if type(items) ~= "table" then
+        return
+    end
+    for _, itemData in ipairs(items) do
+        local item = Item.fromData(itemData)
+        local row = type(itemData) == "table" and type(itemData.row) == "number" and math.floor(itemData.row) or nil
+        local col = type(itemData) == "table" and type(itemData.col) == "number" and math.floor(itemData.col) or nil
+        if item and row and row >= 1 and col and col >= 1 then
+            self:ensureRowsMinimum(row)
+            local targetRow = self:rows()[row]
+            targetRow:ensureColumnsMinimum(col)
+            for _, slot in ipairs(targetRow:children()) do
+                if slot:index() == col and slot:isInstanceOf(EmptySlot) then
+                    slot:fillWithItemSilently(item)
+                    break
+                end
+            end
+        end
+    end
 end
 
 ---@private

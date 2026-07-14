@@ -35,6 +35,34 @@ function Gui:createToolbar()
 end
 
 ---@public
+---@return string
+function Gui:exportToolbarsJson()
+    local toolbars = {}
+    for _, toolbar in ipairs(self:toolbars()) do
+        table.insert(toolbars, toolbar:exportState())
+    end
+    return helpers.table_to_json({ toolbars = toolbars })
+end
+
+---@public
+---@param jsonText string
+---@return boolean success
+function Gui:importToolbarsFromJson(jsonText)
+    local success, decoded = pcall(helpers.json_to_table, jsonText)
+    if not success or type(decoded) ~= "table" or type(decoded.toolbars) ~= "table" then
+        return false
+    end
+
+    self:clear()
+    for _, toolbarState in ipairs(decoded.toolbars) do
+        if type(toolbarState) == "table" then
+            Toolbar.create(self):applyState(toolbarState)
+        end
+    end
+    return true
+end
+
+---@public
 function Gui:clear()
     for _, toolbar in ipairs(self:toolbars()) do
         toolbar:delete()

@@ -1,4 +1,5 @@
 import("Thing")
+import("factorio.ItemFluidPrototypes")
 
 ---@class Item : Thing
 Item = Thing:extendAs("Item")
@@ -53,4 +54,22 @@ end
 ---@return ItemIDAndQualityIDPair
 function Item:nameQualityPair()
     return { name = self:name(), quality = self:quality() }
+end
+
+---[STATIC]
+---@public
+---@param data table untrusted data, e.g. decoded from clipboard JSON
+---@return Item|nil
+function Item.fromData(data)
+    if type(data) ~= "table" or type(data.name) ~= "string" then
+        return nil
+    end
+    if ItemFluidPrototypes.instance():findItemFluidPrototype(data.name) == nil then
+        return nil
+    end
+    local quality = type(data.quality) == "string" and data.quality or "normal"
+    if prototypes.quality[quality] == nil then
+        quality = "normal"
+    end
+    return Item.new(data.name, quality)
 end

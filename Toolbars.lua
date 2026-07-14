@@ -28,6 +28,8 @@ Toolbars.controls = {
     createToolbar = Toolbars.prefix("create-toolbar"),
     toggleToolbars = Toolbars.prefix("toggle-toolbars"),
     toggleToolbarHeader = Toolbars.prefix("toggle-toolbar-header"),
+    exportAllToolbars = Toolbars.prefix("export-all-toolbars"),
+    importAllToolbars = Toolbars.prefix("import-all-toolbars"),
 
     craftOne = Toolbars.prefix("craft-1"),
     craftFive = Toolbars.prefix("craft-5"),

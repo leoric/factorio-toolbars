@@ -80,6 +80,22 @@ function EmptySlot:setSimpleTool(simpleTool)
     simpleToolSlot:fireTableChange()
 end
 
+---@public
+---@param item Item
+function EmptySlot:fillWithItem(item)
+    self:setItem(item)
+end
+
+---Like fillWithItem, but doesn't fire a table-changed/resize event. Used when
+---placing many items in a row during full-state reconstruction, where the
+---caller will trigger a single resize once everything has been placed.
+---@public
+---@param item Item
+function EmptySlot:fillWithItemSilently(item)
+    local itemSlot = ItemSlot.create(self:parent(), item)
+    self:replaceWith(itemSlot)
+end
+
 function EmptySlot:thing()
     return self:item()
 end

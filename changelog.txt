@@ -1,4 +1,16 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.41.0
+Date: 29. 06. 2026
+  Changes:
+    - added shortcut bar buttons to export/import ALL toolbars at once, including their position, lock state, alignment, one-section-mode, header visibility, and each section's name/collapsed state/items with exact slot positions
+
+---------------------------------------------------------------------------------------------------
+Version: 2.40.0
+Date: 28. 06. 2026
+  Changes:
+    - added Export/Import buttons to each toolbar header to copy/paste its items as JSON via the clipboard
+
+---------------------------------------------------------------------------------------------------
 Version: 2.39.0
 Date: 25. 06. 2026
   Changes:
