@@ -18,6 +18,8 @@
 ---@field private _bottomBorder number
 Box = Object:extendAs("gui.Box")
 
+---@public
+---@return Box
 function Box.new()
     local this = Box:super(Object.new())
 

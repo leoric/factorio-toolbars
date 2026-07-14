@@ -22,11 +22,14 @@ function QualityOverlay.create(parent)
     )
 end
 
-function QualityOverlay.new(parent, root)
-    return QualityOverlay:super(Component.new(parent, root, { QualitySprite }))
+---@protected
+---@param element LuaGuiElement
+---@return QualityOverlay
+function QualityOverlay.new(element)
+    return QualityOverlay:super(Component.new(element, { QualitySprite }))
 end
 
-function QualityOverlay:initilize()
+function QualityOverlay:initialize()
     self:migrateTo_2_22_0()
 end
 

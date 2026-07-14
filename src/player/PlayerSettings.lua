@@ -16,9 +16,10 @@ import("player.events.settings.ShowLogisticNetworksContentSettingChanged")
 ---@field private _logisticNetworksContentRefreshInterval number
 PlayerSettings = Object:extendAs("player.PlayerSettings")
 
----@return Settings
+---@public
 ---@param luaPlayer LuaPlayer
 ---@param eventBus EventBus
+---@return PlayerSettings
 function PlayerSettings.new(luaPlayer, eventBus)
     local this = PlayerSettings:super(Object.new())
     this._luaPlayer = luaPlayer

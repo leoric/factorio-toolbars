@@ -36,11 +36,15 @@ function Slot.create(class, parent, builder)
     )
 end
 
-function Slot.new(parent, element, childrenClasses)
-    return Slot:super(Component.new(parent, element, childrenClasses))
+---@protected
+---@param element LuaGuiElement
+---@param childrenClasses Component[]
+---@return Slot
+function Slot.new(element, childrenClasses)
+    return Slot:super(Component.new(element, childrenClasses))
 end
 
-function Slot:initilize()
+function Slot:initialize()
     self._history = SlotHistory:getInstanceFor(self:element().player_index)
     self._toolbar = self:ancestor(Toolbar)
 end

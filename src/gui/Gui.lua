@@ -7,9 +7,11 @@ Gui = StackedContainer:extendAs("gui.Gui")
 
 ---@public
 ---@param player Player
+---@return Gui
 function Gui.new(player)
-    local this = Gui:super(StackedContainer.new(nil, player:luaPlayer().gui.screen, { Toolbar }))
+    local this = Gui:super(StackedContainer.new(player:luaPlayer().gui.screen, { Toolbar }))
     this:setPlayer(player)
+    this:setGui(this)
     this._descendantsByElementIndex = {}
     return this
 end
@@ -26,7 +28,7 @@ function Gui:load()
         end
     end
     self:propagateInitialization()
-    self:fireSizeChange()
+    self:fireSizeChanged()
 end
 
 ---@public
@@ -110,7 +112,7 @@ end
 
 ---@public
 ---@param click Click
-function Gui:handleClick(click)
+function Gui:dispatchClick(click)
     local component = self._descendantsByElementIndex[click:elementIndex()]
     if component then
         component:propagateOnClick(click)
@@ -119,7 +121,7 @@ end
 
 ---@public
 ---@param elementChanged ElementChanged
-function Gui:handleElementChanged(elementChanged)
+function Gui:dispatchElementChanged(elementChanged)
     local component = self._descendantsByElementIndex[elementChanged:elementIndex()]
     if component then
         component:propagateOnElementChanged()
@@ -128,7 +130,7 @@ end
 
 ---@public
 ---@param elementLocationChanged ElementLocationChanged
-function Gui:handleElementLocationChanged(elementLocationChanged)
+function Gui:dispatchElementLocationChanged(elementLocationChanged)
     local component = self._descendantsByElementIndex[elementLocationChanged:elementIndex()]
     if component then
         component:propagateOnElementLocationChanged()
@@ -137,7 +139,7 @@ end
 
 ---@public
 ---@param hovered Hovered
-function Gui:handleHover(hovered)
+function Gui:dispatchHover(hovered)
     local component = self._descendantsByElementIndex[hovered:elementIndex()]
     if component then
         component:propagateOnHover()
@@ -146,7 +148,7 @@ end
 
 ---@public
 ---@param left Left
-function Gui:handleLeave(left)
+function Gui:dispatchLeave(left)
     local component = self._descendantsByElementIndex[left:elementIndex()]
     if component then
         component:propagateOnLeave()

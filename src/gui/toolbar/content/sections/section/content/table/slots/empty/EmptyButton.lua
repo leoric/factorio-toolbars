@@ -3,6 +3,10 @@ import("gui.Component")
 ---@class EmptyButton : Component
 EmptyButton = Component:extendAs("gui.toolbar.content.sections.section.content.table.slots.empty.EmptyButton")
 
+---@public
+---@param parent Component
+---@param mouse_button_filter MouseButtonFlags
+---@return EmptyButton
 function EmptyButton.create(parent, mouse_button_filter)
     return Component.create(
             EmptyButton,
@@ -16,8 +20,11 @@ function EmptyButton.create(parent, mouse_button_filter)
     )
 end
 
-function EmptyButton.new(parent, root)
-    return EmptyButton:super(Component.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return EmptyButton
+function EmptyButton.new(element)
+    return EmptyButton:super(Component.new(element))
 end
 
 ---@public

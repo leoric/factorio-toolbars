@@ -10,8 +10,8 @@ NonPersonalLogisticNetworksInventory = Inventory:extendAs("player.inventory.pers
 NonPersonalLogisticNetworksInventory.__icon = Icon.new("item", "construction-robot")
 
 ---@public
----@return NonPersonalLogisticNetworksInventory
 ---@param player Player
+---@return NonPersonalLogisticNetworksInventory
 function NonPersonalLogisticNetworksInventory.new(player)
     local this = NonPersonalLogisticNetworksInventory:super(Inventory.new(player))
     this._player = player

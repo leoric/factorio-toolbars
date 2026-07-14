@@ -6,7 +6,9 @@ import("factorio.RecipePrototypes")
 ---@field private _recipesByItemProductName Cache
 Recipes = Object:extendAs("Recipes")
 
+---@public
 ---@param luaPlayer LuaPlayer
+---@return Recipes
 function Recipes.new(luaPlayer)
     local this = Recipes:super(Object.new())
     this._luaPlayer = luaPlayer

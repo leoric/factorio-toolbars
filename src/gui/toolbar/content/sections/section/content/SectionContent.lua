@@ -4,6 +4,9 @@ import("gui.toolbar.content.sections.section.content.table.Table")
 ---@class SectionContent : VerticalContainer
 SectionContent = VerticalContainer:extendAs("gui.toolbar.content.sections.section.content.Content")
 
+---@public
+---@param parent Component
+---@return SectionContent
 function SectionContent.create(parent)
     return VerticalContainer.create(
             SectionContent,
@@ -18,8 +21,11 @@ function SectionContent.create(parent)
     )
 end
 
-function SectionContent.new(parent, element)
-    return SectionContent:super(VerticalContainer.new(parent, element, { Table }))
+---@protected
+---@param element LuaGuiElement
+---@return SectionContent
+function SectionContent.new(element)
+    return SectionContent:super(VerticalContainer.new(element, { Table }))
 end
 
 ---@public

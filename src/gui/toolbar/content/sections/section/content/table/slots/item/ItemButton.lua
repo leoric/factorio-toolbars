@@ -5,6 +5,7 @@ import("gui.Component")
 ---@field private _item Item
 ItemButton = Component:extendAs("gui.toolbar.content.sections.section.content.table.slots.item.ItemButton")
 
+---@public
 ---@param parent Component
 ---@param item Item
 ---@param mouse_button_filter string[]
@@ -22,11 +23,14 @@ function ItemButton.create(parent, item, mouse_button_filter)
     )
 end
 
-function ItemButton.new(parent, root)
-    return ItemButton:super(Component.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return ItemButton
+function ItemButton.new(element)
+    return ItemButton:super(Component.new(element))
 end
 
-function ItemButton:initilize()
+function ItemButton:initialize()
     self:migrateTo_2_0_9()
     self:migrateTo_2_32_0()
 end

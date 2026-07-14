@@ -17,6 +17,9 @@ import("gui.toolbar.header.Unlock")
 ---@class ToolbarHeader : HorizontalContainer
 ToolbarHeader = HorizontalContainer:extendAs("gui.toolbar.header.Header")
 
+---@public
+---@param parent Component
+---@return ToolbarHeader
 function ToolbarHeader.create(parent)
     return HorizontalContainer.create(
             ToolbarHeader,
@@ -38,10 +41,12 @@ function ToolbarHeader.create(parent)
     )
 end
 
-function ToolbarHeader.new(parent, root)
+---@protected
+---@param element LuaGuiElement
+---@return ToolbarHeader
+function ToolbarHeader.new(element)
     return ToolbarHeader:super(HorizontalContainer.new(
-            parent,
-            root,
+            element,
             { Lock, Unlock,
               AlignBottom, AlignTop,
               ToolbarDrag,
@@ -52,7 +57,7 @@ function ToolbarHeader.new(parent, root)
             }))
 end
 
-function ToolbarHeader:initilize()
+function ToolbarHeader:initialize()
     self:migrateTo_2_12_0()
     self:migrateTo_2_19_0()
     self:migrateTo_2_40_0()

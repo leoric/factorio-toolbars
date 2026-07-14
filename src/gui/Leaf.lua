@@ -3,8 +3,12 @@ import("gui.Sized")
 ---@class Leaf : Sized
 Leaf = Sized:extendAs("gui.Leaf")
 
-function Leaf.new(parent, root)
-    return Leaf:super(Sized.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@param box Box
+---@return Leaf
+function Leaf.new(element, box)
+    return Leaf:super(Sized.new(element, {}, box))
 end
 
 function Leaf:freshWidth()

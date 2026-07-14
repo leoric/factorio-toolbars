@@ -3,7 +3,9 @@ import("gui.GuiEvent")
 ---@class Click : GuiEvent
 Click = GuiEvent:extendAs("factorio.events.gui.Click")
 
+---@public
 ---@param eventData EventData
+---@return Click
 function Click.new(eventData)
     return Click:super(GuiEvent.new(eventData))
 end

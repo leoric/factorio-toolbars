@@ -4,8 +4,10 @@ import("Event")
 ---@field private _qualitiesCount table<string,number>
 ViewInventoryItemCountChanged = Event:extendAs("player.inventory.Inventory.ViewInventoryItemCountChanged")
 
+---@public
 ---@param name string
 ---@param qualitiesCount table<string,number>
+---@return ViewInventoryItemCountChanged
 function ViewInventoryItemCountChanged.new(name, qualitiesCount)
     local this = ViewInventoryItemCountChanged:super(Event.new(name))
     this._qualitiesCount = qualitiesCount

@@ -4,12 +4,12 @@ import("player.inventory.personal.character.crafting.CraftingPlan")
 
 ---@class CharacterMainInventory : MainInventory
 ---@field private _player Player
----@field private _craftingCategories string[]
+---@field private _craftingCategories table<string, boolean>
 CharacterMainInventory = MainInventory:extendAs("player.inventory.personal.character.CharacterMainInventory")
 
 ---@public
----@return CharacterMainInventory
 ---@param player Player
+---@return CharacterMainInventory
 function CharacterMainInventory.new(player)
     local this = CharacterMainInventory:super(MainInventory.new(player))
     this._player = player
@@ -18,14 +18,17 @@ function CharacterMainInventory.new(player)
 end
 
 ---@private
+---@return table<string, boolean>
 function CharacterMainInventory:freshCharacterCraftingCategories()
     local craftingCategories = {}
-    for categoryName, _ in pairs(self._player:luaPlayer().character.prototype.crafting_categories) do
-        table.insert(craftingCategories, categoryName)
+    for category, boolean in pairs(self._player:luaPlayer().character.prototype.crafting_categories) do
+        craftingCategories[category] = true
     end
     return craftingCategories
 end
 
+---@param recipe LuaRecipe
+---@param requestedCraftCount number
 function CharacterMainInventory:craft(recipe, requestedCraftCount)
     return self._player:luaPlayer().begin_crafting { recipe = recipe, count = requestedCraftCount }
 end
@@ -41,7 +44,9 @@ function CharacterMainInventory:craftingPlansInDescendingCountOrderForAnItem(ite
     for i, recipe in ipairs(recipes) do
         table.insert(plans, CraftingPlan.new(itemName, recipe, self))
     end
-    table.sort(plans, function(first, second) return first:compareTo(second) end)
+    table.sort(plans, function(first, second)
+        return first:compareTo(second)
+    end)
     return plans
 end
 
@@ -50,11 +55,9 @@ end
 ---@param recipe LuaRecipe
 ---@return boolean
 function CharacterMainInventory:canCraft(recipe)
-    for i, category in ipairs(self._craftingCategories) do
-        for i, recipeCategory in ipairs(recipe.categories) do
-            if category == recipeCategory then
-                return true
-            end
+    for i, recipeCategory in ipairs(recipe.categories) do
+        if self._craftingCategories[recipeCategory] then
+            return true
         end
     end
     return false;

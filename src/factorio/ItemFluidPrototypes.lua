@@ -5,6 +5,8 @@ import("Cache")
 ---@field private _itemFluidPrototypes Cache
 ItemFluidPrototypes = Object:extendAs("factorio.ItemFluidPrototypes")
 
+---@private
+---@return ItemFluidPrototypes
 function ItemFluidPrototypes.new()
     local this = ItemFluidPrototypes:super(Object.new())
     this._itemFluidPrototypes = Cache.new(function(name)

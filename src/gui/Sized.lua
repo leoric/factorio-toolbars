@@ -11,14 +11,17 @@ Sized = Component:extendAs("gui.Sized")
 
 function Sized.create(class, parent, addParameters, builder)
     local instance = Component.create(class, parent, addParameters, builder)
-    --Executed here instead of Container.addChild(child) because now it's fully initialized as Sized object
-    instance:fireSizeChange()
+    instance:fireSizeChanged()
     return instance
 end
 
-function Sized.new(parent, element, childrenClasses)
-    local this = Sized:super(Component.new(parent, element, childrenClasses))
-    this:setBox(Box.none())
+---@protected
+---@param element LuaGuiElement
+---@param childrenClasses Component[]
+---@param box Box
+function Sized.new(element, childrenClasses, box)
+    local this = Sized:super(Component.new(element, childrenClasses))
+    this._box = box or Box.none()
     return this
 end
 
@@ -26,30 +29,36 @@ end
 ---@param box Box
 function Sized:setBox(box)
     self._box = box
+    self:fireSizeChanged()
 end
 
 function Sized:show()
     Sized:super().show(self)
-    self:fireSizeChange()
+    self:fireSizeChanged()
 end
 
 function Sized:hide()
     Sized:super().hide(self)
-    self:fireSizeChange()
-end
-
----@public
-function Sized:fireSizeChange()
-    self:onWidthChange()
-    self:onHeightChange()
+    self:fireSizeChanged()
 end
 
 ---@protected
-function Sized:onWidthChange()
+function Sized:fireSizeChanged()
+    self:onSizeChanged()
+end
+
+---@protected
+function Sized:onSizeChanged()
+    self:onWidthChanged()
+    self:onHeightChanged()
+end
+
+---@protected
+function Sized:onWidthChanged()
     local widthChanged = self:refreshWidth()
     local displayWidthChanged = self:refreshDisplayWidth()
     if (widthChanged or displayWidthChanged) and self:isChild() then
-        self:parent():onWidthChange()
+        self:parent():cast(Sized):onWidthChanged()
     end
 end
 
@@ -72,10 +81,16 @@ function Sized:refreshWidth()
     return self._width ~= previousWidth
 end
 
+---@protected
+---@return number
+function Sized:freshWidth()
+    error("Not implemented")
+end
+
 ---@public
 ---@return number
 function Sized:displayWidth()
-    local previousDisplayWidth = self._displayWidth
+    --local previousDisplayWidth = self._displayWidth
     if self._displayWidth == nil then
         self:refreshDisplayWidth()
     end
@@ -93,22 +108,16 @@ end
 
 ---@protected
 ---@return number
-function Sized:freshWidth()
-    error("Not implemented")
-end
-
----@protected
----@return number
 function Sized:freshDisplayWidth()
     error("Not implemented")
 end
 
 ---@protected
-function Sized:onHeightChange()
+function Sized:onHeightChanged()
     local heightChanged = self:refreshHeight()
     local displayHeightChanged = self:refreshDisplayHeight()
     if (heightChanged or displayHeightChanged) and self:isChild() then
-        self:parent():onHeightChange()
+        self:parent():cast(Sized):onHeightChanged()
     end
 end
 
@@ -129,6 +138,12 @@ function Sized:refreshHeight()
     local previousHeight = self._height
     self._height = self:freshHeight()
     return self._height ~= previousHeight
+end
+
+---@protected
+---@return number
+function Sized:freshHeight()
+    error("Not implemented")
 end
 
 ---@public
@@ -153,12 +168,6 @@ end
 ---@protected
 ---@return number
 function Sized:freshDisplayHeight()
-    error("Not implemented")
-end
-
----@protected
----@return number
-function Sized:freshHeight()
     error("Not implemented")
 end
 

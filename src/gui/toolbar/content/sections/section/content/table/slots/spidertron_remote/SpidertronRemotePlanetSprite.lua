@@ -20,6 +20,9 @@ function SpidertronRemotePlanetSprite.create(parent, planet)
     )
 end
 
-function SpidertronRemotePlanetSprite.new(parent, root)
-    return SpidertronRemotePlanetSprite:super(Component.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return SpidertronRemotePlanetSprite
+function SpidertronRemotePlanetSprite.new(element)
+    return SpidertronRemotePlanetSprite:super(Component.new(element))
 end

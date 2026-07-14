@@ -5,6 +5,7 @@ import("Item")
 ---@field private _qualityCounts table<string,number>
 SpidertronRemoteDimOverlay = Component:extendAs("gui.toolbar.content.sections.section.content.table.slots.spidertron_remote.SpidertronRemoteDimOverlay")
 
+---@public
 ---@param parent Component
 ---@return SpidertronRemoteDimOverlay
 function SpidertronRemoteDimOverlay.create(parent)
@@ -19,8 +20,11 @@ function SpidertronRemoteDimOverlay.create(parent)
     )
 end
 
-function SpidertronRemoteDimOverlay.new(parent, root)
-    return SpidertronRemoteDimOverlay:super(Component.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return SpidertronRemoteDimOverlay
+function SpidertronRemoteDimOverlay.new(element)
+    return SpidertronRemoteDimOverlay:super(Component.new(element))
 end
 
 ---@public

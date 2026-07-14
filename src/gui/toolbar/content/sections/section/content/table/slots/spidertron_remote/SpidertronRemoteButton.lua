@@ -3,8 +3,10 @@ import("gui.Component")
 ---@class SpidertronRemoteButton : Component
 SpidertronRemoteButton = Component:extendAs("gui.toolbar.content.sections.section.content.table.slots.spidertron_remote.SpidertronRemoteButton")
 
+---@public
 ---@param parent Component
 ---@param mouse_button_filter string[]
+---@return SpidertronRemoteButton
 function SpidertronRemoteButton.create(parent, mouse_button_filter)
     return Component.create(
             SpidertronRemoteButton,
@@ -19,8 +21,11 @@ function SpidertronRemoteButton.create(parent, mouse_button_filter)
     )
 end
 
-function SpidertronRemoteButton.new(parent, root)
-    return SpidertronRemoteButton:super(Component.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return SpidertronRemoteButton
+function SpidertronRemoteButton.new(element)
+    return SpidertronRemoteButton:super(Component.new(element))
 end
 
 ---@public

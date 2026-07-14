@@ -1,10 +1,12 @@
 import("Cache")
 
----@class QualityPrototypes : Object
----@field private __instance QualityPrototypes
+---@class QualityLevels : Object
+---@field private __instance QualityLevels
 ---@field private _qualityLevels Cache
-QualityLevels = Object:extendAs("factorio.QualityPrototypes")
+QualityLevels = Object:extendAs("factorio.QualityLevels")
 
+---@public
+---@return QualityLevels
 function QualityLevels.new()
     local this = QualityLevels:super(Object.new())
     this._qualityLevels = Cache.new(function(name)
@@ -14,7 +16,7 @@ function QualityLevels.new()
 end
 
 ---@public
----@return QualityPrototypes
+---@return QualityLevels
 function QualityLevels.instance()
     return QualityLevels.__instance
 end

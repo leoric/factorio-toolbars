@@ -15,7 +15,7 @@ function Object:extendAs(name)
 end
 
 ---@public
----@return self
+---@return Object
 function Object.new()
     return Object:super({})
 end
@@ -23,11 +23,11 @@ end
 ---[class] Don't use on an object, self refers then to the leaf not a Class of a current method.
 ---@public
 ---@generic S : Object
----@param super S @instance of super class to create an object or nothing to get a super Class
+---@param superInstance S @instance of a super class to create an object or nothing to get a super Class
 ---@return self @instance of self class or super Class
-function Object:super(super)
-    if super then
-        return setmetatable(super, self)
+function Object:super(superInstance)
+    if superInstance then
+        return setmetatable(superInstance, self)
     else
         return getmetatable(self:class()).__index
     end
@@ -112,7 +112,6 @@ D = C:extendAs("D")
 function D.new()
     local this = D:super(C.new())
     this._field = "D._field" .. " " .. this._field
-    if this._unknown == nil then end
     return this
 end
 

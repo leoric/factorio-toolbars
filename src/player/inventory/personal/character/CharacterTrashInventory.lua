@@ -12,8 +12,8 @@ CharacterTrashInventory = Inventory:extendAs("player.inventory.personal.Characte
 CharacterTrashInventory.__icon = Icon.new("img", Toolbars.icons.characterTrash)
 
 ---@public
----@return CharacterTrashInventory
 ---@param player Player
+---@return CharacterTrashInventory
 function CharacterTrashInventory.new(player)
     local this = CharacterTrashInventory:super(Inventory.new(player))
     this._player = player

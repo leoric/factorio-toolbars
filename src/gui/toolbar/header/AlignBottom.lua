@@ -6,6 +6,9 @@ import("gui.toolbar.header.AlignTop")
 ---@field private _toolbar Toolbar
 AlignBottom = ToolbarHeaderButton:extendAs("gui.toolbar.header.AlignBottom")
 
+---@public
+---@param parent Component
+---@return AlignBottom
 function AlignBottom.create(parent, index)
     return ToolbarHeaderButton.create(
             AlignBottom,
@@ -19,12 +22,15 @@ function AlignBottom.create(parent, index)
     )
 end
 
-function AlignBottom.new(parent, root)
-    return AlignBottom:super(ToolbarHeaderButton.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return AlignBottom
+function AlignBottom.new(element)
+    return AlignBottom:super(ToolbarHeaderButton.new(element))
 end
 
-function AlignBottom:initilize()
-    AlignBottom:super().initilize(self)
+function AlignBottom:initialize()
+    AlignBottom:super().initialize(self)
     self._toolbar = self:ancestor(Toolbar)
 end
 

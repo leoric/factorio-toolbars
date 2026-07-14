@@ -23,8 +23,11 @@ function SpidertronRemotePlanetOverlay.create(parent, planet)
     )
 end
 
-function SpidertronRemotePlanetOverlay.new(parent, root)
-    return SpidertronRemotePlanetOverlay:super(Component.new(parent, root, { SpidertronRemotePlanetSprite }))
+---@protected
+---@param element LuaGuiElement
+---@return SpidertronRemotePlanetOverlay
+function SpidertronRemotePlanetOverlay.new(element)
+    return SpidertronRemotePlanetOverlay:super(Component.new(element, { SpidertronRemotePlanetSprite }))
 end
 
 ---@public

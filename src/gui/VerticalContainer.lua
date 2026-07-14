@@ -1,22 +1,35 @@
 import("gui.Container")
+import("gui.Sized")
 
 ---@class VerticalContainer : Container
 VerticalContainer = Container:extendAs("gui.VerticalContainer")
 
+---@protected
+---@generic C : Component
+---@param class C
+---@param parent Component
+---@param addParameters LuaGuiElement.add_parameters
+---@param builder fun(instance: C):void optional
+---@return C
 function VerticalContainer.create(class, parent, addParameters, builder)
     addParameters.direction = "vertical"
     return Container.create(class, parent, addParameters, builder)
 end
 
-function VerticalContainer.new(parent, element, childrenClasses)
-    return VerticalContainer:super(Container.new(parent, element, childrenClasses))
+---@protected
+---@param element LuaGuiElement
+---@param childrenClasses Component[]
+---@param box Box
+---@return VerticalContainer
+function VerticalContainer.new(element, childrenClasses, box)
+    return VerticalContainer:super(Container.new(element, childrenClasses, box))
 end
 
 function VerticalContainer:freshWidth()
     local biggestChildWidth = 0
     for _, child in ipairs(self:children()) do
         if child:width() > biggestChildWidth then
-            biggestChildWidth = child:width()
+            biggestChildWidth = child:cast(Sized):width()
         end
     end
     return biggestChildWidth + self:box():totalWidthSpacing()
@@ -30,7 +43,7 @@ function VerticalContainer:freshDisplayWidth()
     local biggestChildDisplayWidth = 0
     for _, child in ipairs(self:children()) do
         if child:displayWidth() > biggestChildDisplayWidth then
-            biggestChildDisplayWidth = child:displayWidth()
+            biggestChildDisplayWidth = child:cast(Sized):displayWidth()
         end
     end
     return biggestChildDisplayWidth + self:box():scale(self:display():scaleValue()):totalWidthSpacing()
@@ -39,7 +52,7 @@ end
 function VerticalContainer:freshHeight()
     local height = 0
     for _, child in ipairs(self:children()) do
-        height = height + child:height()
+        height = height + child:cast(Sized):height()
     end
     return height + self:box():totalHeightSpacing() + self:extraSpacing()
 end
@@ -51,7 +64,7 @@ function VerticalContainer:freshDisplayHeight()
 
     local displayHeight = 0
     for _, child in ipairs(self:children()) do
-        displayHeight = displayHeight + child:displayHeight()
+        displayHeight = displayHeight + child:cast(Sized):displayHeight()
     end
     return displayHeight + self:box():scale(self:display():scaleValue()):totalHeightSpacing() + self:display():scale(self:extraSpacing())
 end

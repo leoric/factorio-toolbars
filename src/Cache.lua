@@ -6,6 +6,7 @@ Cache = Object:extendAs("Cache")
 
 ---@generic K, V
 ---@param supplier fun(key: K):V
+---@return Cache
 function Cache.new(supplier)
     local this = Cache:super(Object.new())
     this._memory = {}

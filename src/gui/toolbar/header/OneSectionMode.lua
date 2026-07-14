@@ -3,6 +3,10 @@ import("gui.toolbar.header.ToolbarHeaderButton")
 ---@class OneSectionMode : ToolbarHeaderButton
 OneSectionMode = ToolbarHeaderButton:extendAs("gui.toolbar.header.OneSectionMode")
 
+---@public
+---@param parent Component
+---@param index number
+---@return OneSectionMode
 function OneSectionMode.create(parent, index)
     return ToolbarHeaderButton.create(
             OneSectionMode,
@@ -17,8 +21,11 @@ function OneSectionMode.create(parent, index)
     )
 end
 
-function OneSectionMode.new(parent, root)
-    return OneSectionMode:super(ToolbarHeaderButton.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return OneSectionMode
+function OneSectionMode.new(element)
+    return OneSectionMode:super(ToolbarHeaderButton.new(element))
 end
 
 function OneSectionMode:onClick(click)

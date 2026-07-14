@@ -6,6 +6,9 @@ import("gui.toolbar.content.sections.Sections")
 ---@class ToolbarContent : VerticalContainer
 ToolbarContent = VerticalContainer:extendAs("gui.toolbar.content.Content")
 
+---@public
+---@param parent Component
+---@return ToolbarContent
 function ToolbarContent.create(parent)
     return VerticalContainer.create(
             ToolbarContent,
@@ -22,11 +25,14 @@ function ToolbarContent.create(parent)
     )
 end
 
-function ToolbarContent.new(parent, element)
-    return ToolbarContent:super(VerticalContainer.new(parent, element, { Sections, AddSection }))
+---@protected
+---@param element LuaGuiElement
+---@return ToolbarContent
+function ToolbarContent.new(element)
+    return ToolbarContent:super(VerticalContainer.new(element, { Sections, AddSection }))
 end
 
-function ToolbarContent:initilize()
+function ToolbarContent:initialize()
     self:migrateTo_2_14_0()
 end
 

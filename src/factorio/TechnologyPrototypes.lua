@@ -5,6 +5,8 @@ import("Cache")
 ---@field private _technologyPrototypeByUnlockedRecipe Cache
 TechnologyPrototypes = Object:extendAs("factorio.TechnologyPrototypes")
 
+---@private
+---@return TechnologyPrototypes
 function TechnologyPrototypes.new()
     local this = TechnologyPrototypes:super(Object.new())
     this._technologyPrototypeByUnlockedRecipe = Cache.new(function(unlockedRecipeName)
