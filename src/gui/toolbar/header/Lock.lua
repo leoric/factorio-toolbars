@@ -4,6 +4,9 @@ import("gui.toolbar.header.Unlock")
 ---@class Lock : ToolbarHeaderButton
 Lock = ToolbarHeaderButton:extendAs("gui.toolbar.header.Lock")
 
+---@public
+---@param parent Component
+---@return Lock
 function Lock.create(parent)
     return ToolbarHeaderButton.create(
             Lock,
@@ -16,8 +19,11 @@ function Lock.create(parent)
     )
 end
 
-function Lock.new(parent, root)
-    return Lock:super(ToolbarHeaderButton.new(parent, root))
+---@public
+---@param element LuaGuiElement
+---@return Lock
+function Lock.new(element)
+    return Lock:super(ToolbarHeaderButton.new(element))
 end
 
 function Lock:onClick(click)

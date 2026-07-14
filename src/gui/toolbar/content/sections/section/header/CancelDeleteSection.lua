@@ -3,6 +3,9 @@ import("gui.toolbar.content.sections.section.header.SectionHeaderButton")
 ---@class CancelDeleteSection : SectionHeaderButton
 CancelDeleteSection = SectionHeaderButton:extendAs("gui.toolbar.content.sections.section.header.CancelDelete")
 
+---@public
+---@param parent Component
+---@return CancelDeleteSection
 function CancelDeleteSection.create(parent)
     return SectionHeaderButton.create(
             CancelDeleteSection,
@@ -15,8 +18,11 @@ function CancelDeleteSection.create(parent)
     )
 end
 
-function CancelDeleteSection.new(parent, element)
-    return CancelDeleteSection:super(SectionHeaderButton.new(parent, element))
+---@protected
+---@param element LuaGuiElement
+---@return CancelDeleteSection
+function CancelDeleteSection.new(element)
+    return CancelDeleteSection:super(SectionHeaderButton.new(element))
 end
 
 function CancelDeleteSection:onClick(click)

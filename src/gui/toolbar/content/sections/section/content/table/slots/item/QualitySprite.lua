@@ -19,8 +19,11 @@ function QualitySprite.create(parent)
     )
 end
 
-function QualitySprite.new(parent, root)
-    return QualitySprite:super(Component.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return QualitySprite
+function QualitySprite.new(element)
+    return QualitySprite:super(Component.new(element))
 end
 
 ---@public

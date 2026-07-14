@@ -1,4 +1,17 @@
 ---------------------------------------------------------------------------------------------------
+Version: 2.39.1
+Date: 13. 07. 2026
+  Changes:
+    - show in a tooltip key binding to open factoriopedia
+  Optimization:
+    - reuse ToolbarHeaderButton locked and unlocked Boxes
+    - modify component children list on modification instead of creating new list on every retrieval
+    - store children by class to improve performance common retrieves
+    - store a character's crafting categories in a table instead of a list to improve checking performance
+    - return the component's first child of a given type without gathering all children of a given type into a new list
+    - create a copy of a component's children by directly copying the index and value, instead of using table.insert(copyChildren, child)
+
+---------------------------------------------------------------------------------------------------
 Version: 2.39.0
 Date: 25. 06. 2026
   Changes:

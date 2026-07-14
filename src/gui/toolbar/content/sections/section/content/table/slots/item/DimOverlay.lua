@@ -5,6 +5,7 @@ import("Item")
 ---@field private _qualityCounts table<string,number>
 DimOverlay = Component:extendAs("gui.toolbar.content.sections.section.content.table.slots.item.DimOverlay")
 
+---@public
 ---@param parent Component
 ---@return DimOverlay
 function DimOverlay.create(parent)
@@ -19,8 +20,11 @@ function DimOverlay.create(parent)
     )
 end
 
-function DimOverlay.new(parent, root)
-    return DimOverlay:super(Component.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return DimOverlay
+function DimOverlay.new(element)
+    return DimOverlay:super(Component.new(element))
 end
 
 ---@public

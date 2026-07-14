@@ -3,6 +3,9 @@ import("gui.toolbar.header.ToolbarHeaderButton")
 ---@class ConfirmDeleteToolbar : ToolbarHeaderButton
 ConfirmDeleteToolbar = ToolbarHeaderButton:extendAs("gui.toolbar.header.ConfirmDelete")
 
+---@public
+---@param parent Component
+---@return ConfirmDeleteToolbar
 function ConfirmDeleteToolbar.create(parent)
     return ToolbarHeaderButton.create(
             ConfirmDeleteToolbar,
@@ -15,8 +18,11 @@ function ConfirmDeleteToolbar.create(parent)
     )
 end
 
-function ConfirmDeleteToolbar.new(parent, root)
-    return ConfirmDeleteToolbar:super(ToolbarHeaderButton.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return ConfirmDeleteToolbar
+function ConfirmDeleteToolbar.new(element)
+    return ConfirmDeleteToolbar:super(ToolbarHeaderButton.new(element))
 end
 
 function ConfirmDeleteToolbar:onClick(click)

@@ -14,8 +14,8 @@ import("player.inventory.personal.character.crafting.CraftingProduct")
 ---@field private _executable boolean
 ---@field private _recipeCraftableCount number
 ---@field private _technology LuaTechnologyPrototype
----@field private _craftingProducts Map
----@field private _craftingIngredients List
+---@field private _craftingProducts table<string, CraftingProduct>
+---@field private _craftingIngredients CraftingIngredient[]
 CraftingPlan = Object:extendAs("player.inventory.personal.character.crafting.CraftingPlan")
 
 ---@public
@@ -40,28 +40,23 @@ function CraftingPlan.new(mainProductName, recipe, characterMainInventory)
 end
 
 ---@private
----@return Map<string, CraftingProduct>
+---@return table<string, CraftingProduct>
 function CraftingPlan:freshProducts()
-    ---@param product Product
-    return List.new(Product, self._recipe.products)
-               :collect(Map.new("", CraftingProduct),
-                        function(container, product)
-                            container:set(product.name,
-                                          CraftingProduct.new(product,
-                                                              self._recipeCraftableCount,
-                                                              self._craftingInventory))
-                        end)
+    local products = {}
+    for i, product in ipairs(self._recipe.products) do
+        products[product.name] = CraftingProduct.new(product, self._recipeCraftableCount, self._craftingInventory)
+    end
+    return products
 end
 
 ---@private
----@return List<CraftingIngredient>
+---@return CraftingIngredient[]
 function CraftingPlan:freshIngredients()
-    return List
-            .new(Ingredient, self._recipe.ingredients)
-            :map(
-            function(ingredient)
-                return CraftingIngredient.new(ingredient.name, ingredient.amount, self._craftingInventory)
-            end)
+    local craftingIngredients = {}
+    for i, ingredient in ipairs(self._recipe.ingredients) do
+        table.insert(craftingIngredients, CraftingIngredient.new(ingredient.name, ingredient.amount, self._craftingInventory))
+    end
+    return craftingIngredients
 end
 
 ---@public
@@ -95,7 +90,7 @@ end
 function CraftingPlan:execute(requestedCraftCount)
     if self:craftableCountOf(self._mainProductName) > 0 then
         ---@type CraftingProduct
-        local craftingProduct = self._craftingProducts:get(self._mainProductName)
+        local craftingProduct = self._craftingProducts[self._mainProductName]
         return self._craftingInventory:craft(
                 self._recipe,
                 math.ceil(requestedCraftCount / craftingProduct:recipeAmount()))
@@ -108,7 +103,7 @@ end
 ---@public
 ---@return number
 function CraftingPlan:craftableCountOf(productName)
-    return self._craftingProducts:get(productName):craftableCount()
+    return self._craftingProducts[productName]:craftableCount()
 end
 
 ---@public
@@ -193,33 +188,23 @@ function CraftingPlan:createProducts()
     local description = LocalisedText.new()
     description:concat(CraftingPlan.__texts.productsTitle)
 
-    ---@param name string
-    ---@param craftingProduct CraftingProduct
-    local widths = self._craftingProducts:collect(
-            {
-                maxCraftableCountWidth = 0,
-                maxInventoryCountWidth = 0,
-                maxRecipeAmountWidth = 0,
-            },
-            function(container, name, craftingProduct)
-                container.maxCraftableCountWidth = math.max(container.maxCraftableCountWidth,
-                                                            craftingProduct:craftableCountText():len())
-                container.maxInventoryCountWidth = math.max(container.maxInventoryCountWidth,
-                                                            craftingProduct:inventoryCountText():len())
-                container.maxRecipeAmountWidth = math.max(container.maxRecipeAmountWidth,
-                                                          craftingProduct:recipeAmountText():len())
-            end)
+    local widths = {
+        maxCraftableCountWidth = 0,
+        maxInventoryCountWidth = 0,
+        maxRecipeAmountWidth = 0,
+    }
 
-    ---@param name string
-    ---@param craftingProduct CraftingProduct
-    self._craftingProducts:forEach(
-            function(name, craftingProduct)
-                description
-                        :appendNewLine()
-                        :concat(craftingProduct:fullDescription(widths.maxCraftableCountWidth,
-                                                                widths.maxInventoryCountWidth,
-                                                                widths.maxRecipeAmountWidth))
-            end)
+    for name, craftingProduct in pairs(self._craftingProducts) do
+        widths.maxCraftableCountWidth = math.max(widths.maxCraftableCountWidth, craftingProduct:craftableCountText():len())
+        widths.maxInventoryCountWidth = math.max(widths.maxInventoryCountWidth, craftingProduct:inventoryCountText():len())
+        widths.maxRecipeAmountWidth = math.max(widths.maxRecipeAmountWidth, craftingProduct:recipeAmountText():len())
+    end
+
+    for name, craftingProduct in pairs(self._craftingProducts) do
+        description
+                :appendNewLine()
+                :concat(craftingProduct:fullDescription(widths.maxCraftableCountWidth, widths.maxInventoryCountWidth, widths.maxRecipeAmountWidth))
+    end
 
     return description
 end
@@ -230,32 +215,23 @@ function CraftingPlan:createIngredients()
     local description = LocalisedText.new()
     description:concat(CraftingPlan.__texts.ingredientsTitle)
 
-    ---@param craftingIngredient CraftingIngredient
-    local widths = self._craftingIngredients:collect(
-            {
-                maxCraftableCountWidth = 0,
-                maxInventoryCountWidth = 0,
-                maxRecipeAmountWidth = 0
-            },
-            function(container, craftingIngredient)
-                container.maxCraftableCountWidth = math.max(container.maxCraftableCountWidth,
-                                                            craftingIngredient:craftableCountText():len())
-                container.maxInventoryCountWidth = math.max(container.maxInventoryCountWidth,
-                                                            craftingIngredient:inventoryCountText():len())
-                container.maxRecipeAmountWidth = math.max(container.maxRecipeAmountWidth,
-                                                          craftingIngredient:recipeAmountText():len())
-            end)
+    local widths = {
+        maxCraftableCountWidth = 0,
+        maxInventoryCountWidth = 0,
+        maxRecipeAmountWidth = 0,
+    }
 
-    ---@param craftingIngredient CraftingIngredient
-    self._craftingIngredients
-        :forEach(
-            function(craftingIngredient)
-                description
-                        :appendNewLine()
-                        :concat(craftingIngredient:fullDescription(widths.maxCraftableCountWidth,
-                                                                   widths.maxInventoryCountWidth,
-                                                                   widths.maxRecipeAmountWidth))
-            end)
+    for i, craftingIngredient in ipairs(self._craftingIngredients) do
+        widths.maxCraftableCountWidth = math.max(widths.maxCraftableCountWidth, craftingIngredient:craftableCountText():len())
+        widths.maxInventoryCountWidth = math.max(widths.maxInventoryCountWidth, craftingIngredient:inventoryCountText():len())
+        widths.maxRecipeAmountWidth = math.max(widths.maxRecipeAmountWidth, craftingIngredient:recipeAmountText():len())
+    end
+
+    for i, craftingIngredient in ipairs(self._craftingIngredients) do
+        description
+                :appendNewLine()
+                :concat(craftingIngredient:fullDescription(widths.maxCraftableCountWidth, widths.maxInventoryCountWidth, widths.maxRecipeAmountWidth))
+    end
 
     return description
 end

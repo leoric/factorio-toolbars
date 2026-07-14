@@ -2,7 +2,7 @@
 	"name": "toolbars-mod",
 	"title": "Toolbars",
 	"author": "zerwiport",
-	"version": "2.39.0",
+	"version": "2.39.1",
 	"factorio_version": "2.1",
 	"dependencies": [
 		"base >= 2.1.7",

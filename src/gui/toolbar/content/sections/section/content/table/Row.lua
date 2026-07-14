@@ -7,6 +7,9 @@ import("gui.toolbar.content.sections.section.content.table.slots.tools.simple.Si
 ---@class Row : Component
 Row = Component:extendAs("gui.toolbar.content.sections.section.content.table.Row")
 
+---@public
+---@param parent Component
+---@return Row
 function Row.create(parent)
     return Component.create(
             Row,
@@ -19,8 +22,11 @@ function Row.create(parent)
     )
 end
 
-function Row.new(parent, root)
-    return Row:super(Component.new(parent, root, { EmptySlot, ItemSlot, SpidertronRemoteSlot, SimpleToolSlot }))
+---@protected
+---@param element LuaGuiElement
+---@return Row
+function Row.new(element)
+    return Row:super(Component.new(element, { EmptySlot, ItemSlot, SpidertronRemoteSlot, SimpleToolSlot }))
 end
 
 ---@public

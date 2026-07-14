@@ -11,20 +11,17 @@ function Strut.create(parent)
     return Leaf.create(Strut, parent, { type = "empty-widget" })
 end
 
-function Strut.new(parent, root)
-    return Strut:super(Leaf.new(parent, root))
-end
-
-function Strut:initilize()
-    self._width = self:element().style.minimal_width or 0
-    self:setBox(Box.new():withWidth(self._width))
+---@protected
+---@param element LuaGuiElement
+---@return Strut
+function Strut.new(element)
+    local width = element.style.minimal_width or 0
+    return Strut:super(Leaf.new(element, Box.new():withWidth(width)))
 end
 
 ---@public
 ---@param width number
-function Strut:setWidth(width)
+function Strut:setFixedWidth(width)
     self:element().style.minimal_width = width
-    self._width = width
     self:setBox(Box.new():withWidth(width))
-    self:onWidthChange()
 end

@@ -7,6 +7,9 @@ import("gui.toolbar.content.sections.section.content.table.Slot")
 ---@field private _toolbar Toolbar
 Table = Sized:extendAs("gui.toolbar.content.sections.section.content.table.Table")
 
+---@public
+---@param parent Component
+---@return Table
 function Table.create(parent)
     return Sized.create(
             Table,
@@ -19,12 +22,14 @@ function Table.create(parent)
     )
 end
 
-function Table.new(parent, element)
-    return Table:super(Sized.new(parent, element, { Row }))
+---@protected
+---@param element LuaGuiElement
+---@return Table
+function Table.new(element)
+    return Table:super(Sized.new(element, { Row }, Toolbars.styles.toolbar.content.sections.section.content.box))
 end
 
-function Table:initilize()
-    self:setBox(Toolbars.styles.toolbar.content.sections.section.content.box)
+function Table:initialize()
     self._toolbar = self:ancestor(Toolbar)
 end
 
@@ -36,7 +41,7 @@ end
 function Table:trim()
     self:trimRowsTo(math.max(1, self:lastOccupiedRowIndex()))
     self:trimColumnsToMinimum(math.max(1, self._toolbar:lastOccupiedColumnIndex()))
-    self:fireSizeChange()
+    self:fireSizeChanged()
 end
 
 function Table:unlock()
@@ -47,7 +52,7 @@ end
 function Table:adjustUnlocked()
     self:adjustUnlockedRows()
     self:adjustUnlockedColumns()
-    self:fireSizeChange()
+    self:fireSizeChanged()
 end
 
 ---@private

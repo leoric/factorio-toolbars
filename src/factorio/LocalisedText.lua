@@ -3,12 +3,15 @@
 ---@field private _localisedString table
 LocalisedText = Object:extendAs("factorio.LocalisedText")
 
+---@public
+---@return LocalisedText
 function LocalisedText.new()
     local this = LocalisedText:super(Object.new())
     this._localisedString = { "" }
     return this
 end
 
+--todo define as a type to prevent unintentional change of a constant
 ---@public
 ---@return LocalisedText
 function LocalisedText.empty()

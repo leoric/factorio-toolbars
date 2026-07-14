@@ -17,6 +17,9 @@ import("gui.toolbar.content.sections.section.header.ToRemoveSectionName")
 ---@field private _toolbar Toolbar
 SectionHeader = HorizontalContainer:extendAs("gui.toolbar.content.sections.section.header.Header")
 
+---@public
+---@param parent Component
+---@return SectionHeader
 function SectionHeader.create(parent)
     return HorizontalContainer.create(
             SectionHeader,
@@ -35,16 +38,20 @@ function SectionHeader.create(parent)
     )
 end
 
-function SectionHeader.new(parent, element)
-    return SectionHeader:super(HorizontalContainer.new(parent, element, {
-        MoveDown, MoveUp,
-        CollapseSection, ExpandSection,
-        SectionNameUnlocked, SectionNameLocked, ToRemoveSectionName,
-        DeleteSection, ConfirmDeleteSection, CancelDeleteSection }))
-end
-
-function SectionHeader:initilize()
-    self:setBox(Toolbars.styles.toolbar.content.sections.section.header.box)
+---@protected
+---@param element LuaGuiElement
+---@return SectionHeader
+function SectionHeader.new(element)
+    return SectionHeader:super(
+            HorizontalContainer.new(
+                    element,
+                    {
+                        MoveDown, MoveUp,
+                        CollapseSection, ExpandSection,
+                        SectionNameUnlocked, SectionNameLocked, ToRemoveSectionName,
+                        DeleteSection, ConfirmDeleteSection, CancelDeleteSection
+                    },
+                    Toolbars.styles.toolbar.content.sections.section.header.box))
 end
 
 function SectionHeader:freshWidth()

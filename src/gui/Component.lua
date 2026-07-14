@@ -1,11 +1,11 @@
 ---@class Component : Object
----@field protected __class string
 ---@field private _player Player
 ---@field private _gui Gui
 ---@field private _parent Component
 ---@field private _element LuaGuiElement
----@field private _children Component[]
 ---@field private _childrenClasses Component[]
+---@field private _children Component[]
+---@field private _childrenByClass Component[]
 ---@field private _controls table<Event, fun(event: Event):void>
 ---@field private _hoverEventHandlers table<Event, fun(event: Event):void>
 ---@field private _hoverCounter number
@@ -18,7 +18,7 @@ Component = Object:extendAs("gui.Component")
 ---@generic C : Component
 ---@param class C
 ---@param parent Component
----@param addParameters LuaGuiElement.add_parameters
+---@param addParameters LuaGuiElement.add_parameters optional
 ---@param builder fun(instance: C):void optional
 ---@return C
 function Component.create(class, parent, addParameters, builder)
@@ -26,7 +26,8 @@ function Component.create(class, parent, addParameters, builder)
     tags.className = class:className()
     addParameters.tags = tags
     addParameters.raise_hover_events = true
-    local instance = class.new(parent, parent:element().add(addParameters))
+    local instance = class.new(parent:element().add(addParameters))
+    instance:setParent(parent)
     if builder then
         builder(instance)
     end
@@ -35,34 +36,24 @@ function Component.create(class, parent, addParameters, builder)
 end
 
 ---@protected
----@param parent Component
 ---@param element LuaGuiElement
----@param childrenClasses Component[]
----@return self
-function Component.new(parent, element, childrenClasses)
+---@param childrenClasses Component[] optional
+---@return Component
+function Component.new(element, childrenClasses)
     local this = Component:super(Object.new())
-    this._parent = parent
     this._element = element
     this._childrenClasses = childrenClasses and childrenClasses or {}
 
     this._children = {}
+    this._childrenByClass = {}
+    for _, class in ipairs(this._childrenClasses) do
+        this._childrenByClass[class] = {}
+    end
     this._controls = {}
     this._hoverEventHandlers = {}
     this._hoverCounter = 0
     this._lastLeftClickTick = 0
     this._lastLeftClickElementIndex = nil
-
-    if this:isRoot() then
-        -- for convenience initialized later in Gui to do not push it through the whole hierarchy of constructors
-        this._player = nil
-        this._gui = this
-    else
-        this._parent:addChild(this)
-        this._player = parent._player
-        this._gui = parent._gui
-        this._gui:addDescendant(this)
-    end
-
     this:migrateTo_2_0_9()
     return this
 end
@@ -79,14 +70,30 @@ function Component:setPlayer(player)
 end
 
 ---@protected
+---@param gui Gui
+function Component:setGui(gui)
+    self._gui = gui
+end
+
+---@protected
 function Component:loadChildren()
     for _, childClass in ipairs(self._childrenClasses) do
         for _, childElement in ipairs(self._element.children) do
             if childClass:isRepresentedBy(childElement) then
-                childClass.new(self, childElement)
+                childClass.new(childElement):setParent(self)
             end
         end
     end
+end
+
+---@private
+---@param parent Component
+function Component:setParent(parent)
+    self._parent = parent
+    self._player = parent._player
+    self._gui = parent._gui
+    self._parent:addChild(self)
+    self._gui:addDescendant(self)
 end
 
 ---@protected
@@ -94,16 +101,40 @@ function Component:propagateInitialization()
     for _, child in ipairs(self:children()) do
         child:propagateInitialization()
     end
-    self:initilize()
+    self:initialize()
 end
 
 ---@protected
-function Component:initilize() end
+function Component:initialize()
+end
+
+---@protected
+---@param childToAdd Component
+function Component:addChild(childToAdd)
+    self:addChildToChildren(childToAdd)
+    self:addChildToChildrenByClass(childToAdd)
+end
 
 ---@private
----@param child Component
-function Component:addChild(child)
-    table.insert(self._children, child)
+---@param childToAdd Component
+function Component:addChildToChildren(childToAdd)
+    local updatedChildren = {}
+    for i, child in ipairs(self._children) do
+        updatedChildren[i] = child
+    end
+    updatedChildren[#updatedChildren + 1] = childToAdd
+    self._children = updatedChildren
+end
+
+---@private
+---@param childToAdd Component
+function Component:addChildToChildrenByClass(childToAdd)
+    local updatedChildrenForClass = {}
+    for i, child in ipairs(self._childrenByClass[childToAdd:class()]) do
+        updatedChildrenForClass[i] = child
+    end
+    updatedChildrenForClass[#updatedChildrenForClass + 1] = childToAdd
+    self._childrenByClass[childToAdd:class()] = updatedChildrenForClass
 end
 
 ---@protected
@@ -141,10 +172,37 @@ end
 ---@protected
 ---@param childToRemove Component
 function Component:removeChild(childToRemove)
-    for index, child in ipairs(self._children) do
-        if child == childToRemove then
-            table.remove(self._children, index)
+    self:removeFromChildren(childToRemove)
+    self:removeFromChildrenByClass(childToRemove)
+end
+
+---@private
+---@param childToRemove Component
+function Component:removeFromChildren(childToRemove)
+    local index = 1
+    local updatedChildren = {}
+    for i, child in ipairs(self._children) do
+        if (child ~= childToRemove) then
+            updatedChildren[index] = child
+            index = index + 1
         end
+    end
+    self._children = updatedChildren
+end
+
+---@private
+---@param childToRemove Component
+function Component:removeFromChildrenByClass(childToRemove)
+    if self._childrenByClass[childToRemove:class()] ~= nil and next(self._childrenByClass[childToRemove:class()]) ~= nil then
+        local index = 1
+        local updatedChildrenByClass = {}
+        for i, child in ipairs(self._childrenByClass[childToRemove:class()]) do
+            if child ~= childToRemove then
+                updatedChildrenByClass[index] = child
+                index = index + 1
+            end
+        end
+        self._childrenByClass[childToRemove:class()] = updatedChildrenByClass
     end
 end
 
@@ -169,9 +227,11 @@ end
 
 ---@public
 ---@param click Click
-function Component:onClick(click) end
+function Component:onClick(click)
+end
 
-function Component:onDoubleLeftClick() end
+function Component:onDoubleLeftClick()
+end
 
 ---@public
 function Component:propagateOnElementChanged()
@@ -180,7 +240,8 @@ function Component:propagateOnElementChanged()
 end
 
 ---@public
-function Component:onElementChanged() end
+function Component:onElementChanged()
+end
 
 ---@public
 function Component:propagateOnElementLocationChanged()
@@ -189,7 +250,8 @@ function Component:propagateOnElementLocationChanged()
 end
 
 ---@public
-function Component:onElementLocationChanged() end
+function Component:onElementLocationChanged()
+end
 
 ---@public
 ---@return boolean
@@ -209,7 +271,8 @@ function Component:propagateOnHover()
 end
 
 ---@public
-function Component:onHover() end
+function Component:onHover()
+end
 
 ---@private
 function Component:registerControls()
@@ -238,7 +301,8 @@ function Component:propagateOnLeave()
 end
 
 ---@public
-function Component:onLeave() end
+function Component:onLeave()
+end
 
 ---@private
 function Component:unregisterControls()
@@ -324,19 +388,9 @@ end
 ---@return T[]
 function Component:children(class)
     if class then
-        local children = {}
-        for _, child in ipairs(self._children) do
-            if child:isInstanceOf(class) then
-                table.insert(children, child)
-            end
-        end
-        return children
+        return self._childrenByClass[class]
     else
-        local children = {}
-        for _, child in ipairs(self._children) do
-            table.insert(children, child)
-        end
-        return children
+        return self._children
     end
 end
 

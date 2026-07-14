@@ -4,6 +4,9 @@ import("gui.toolbar.header.CollapseToolbar")
 ---@class ExpandToolbar : ToolbarHeaderButton
 ExpandToolbar = ToolbarHeaderButton:extendAs("gui.toolbar.header.Expand")
 
+---@public
+---@param parent Component
+---@return ExpandToolbar
 function ExpandToolbar.create(parent)
     return ToolbarHeaderButton.create(
             ExpandToolbar,
@@ -16,12 +19,15 @@ function ExpandToolbar.create(parent)
     )
 end
 
-function ExpandToolbar.new(parent, root)
-    return ExpandToolbar:super(ToolbarHeaderButton.new(parent, root))
+---@public
+---@param element LuaGuiElement
+---@return ExpandToolbar
+function ExpandToolbar.new(element)
+    return ExpandToolbar:super(ToolbarHeaderButton.new(element))
 end
 
-function ExpandToolbar:initilize()
-    ExpandToolbar:super().initilize(self)
+function ExpandToolbar:initialize()
+    ExpandToolbar:super().initialize(self)
     self:migrateTo_2_16_0()
 end
 

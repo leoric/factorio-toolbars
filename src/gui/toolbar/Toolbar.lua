@@ -13,6 +13,9 @@ import("player.events.ToolbarsToggled")
 ---@field private _lastOccupiedColumnIndex number
 Toolbar = Window:extendAs("gui.toolbar.Toolbar")
 
+---@public
+---@param parent Component
+---@return Toolbar
 function Toolbar.create(parent)
     return Window.create(
             Toolbar,
@@ -27,13 +30,14 @@ function Toolbar.create(parent)
     )
 end
 
-function Toolbar.new(parent, element)
-    return Toolbar:super(Window.new(parent, element, { ToolbarHeader, ToolbarContent, Strut }))
+---@protected
+---@param element LuaGuiElement
+---@return Toolbar
+function Toolbar.new(element)
+    return Toolbar:super(Window.new(element, { ToolbarHeader, ToolbarContent, Strut }, Toolbars.styles.toolbar.box))
 end
 
-function Toolbar:initilize()
-    self:setBox(Toolbars.styles.toolbar.box)
-
+function Toolbar:initialize()
     self:setControls({ [ToggleToolbarHeader] = function() self:header():toggle() end })
     self:player():eventBus():subscribeTo(ToolbarsToggled, self, function(event) self:refresh(event) end)
 
@@ -137,7 +141,7 @@ function Toolbar:freezeWidth()
         Strut.create(self)
     end
 
-    self:strut():setWidth(self:content():width())
+    self:strut():setFixedWidth(self:content():width())
 
     --migration to 2.13.0
     self:element().style.minimal_width = 0

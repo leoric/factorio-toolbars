@@ -4,41 +4,50 @@ import("gui.toolbar.Toolbar")
 import("gui.toolbar.header.ToolbarHeader")
 
 ---@class ToolbarHeaderButton : Leaf
+---@field private __lockedBox Box
+---@field private __unlockedBox Box
 ---@field private _header ToolbarHeader
 ---@field private _toolbar Toolbar
 ToolbarHeaderButton = Leaf:extendAs("gui.toolbar.header.Button")
 
-function ToolbarHeaderButton.new(parent, root)
-    return ToolbarHeaderButton:super(Leaf.new(parent, root))
+ToolbarHeaderButton.__lockedBox = Box.new():withContentSize(16)
+ToolbarHeaderButton.__unlockedBox = Box.new():withContentSize(20)
+
+---@protected
+---@param element LuaGuiElement
+---@return ToolbarHeaderButton
+function ToolbarHeaderButton.new(element)
+    return ToolbarHeaderButton:super(
+            Leaf.new(
+                    element,
+                    ToolbarHeaderButton.isLockedElement(element) and ToolbarHeaderButton.__lockedBox or ToolbarHeaderButton.__unlockedBox))
 end
 
-function ToolbarHeaderButton:initilize()
+function ToolbarHeaderButton:initialize()
     self._header = self:ancestor(ToolbarHeader)
     self._toolbar = self:ancestor(Toolbar)
-end
-
-function ToolbarHeaderButton:lock()
-    self:element().style.size = 16
-    self:fireSizeChange()
-end
-
-function ToolbarHeaderButton:unlock()
-    self:element().style.size = 20
-    self:fireSizeChange()
-end
-
-function ToolbarHeaderButton:box()
-    if self:isLocked() then
-        return Box.new():withContentSize(16)
-    else
-        return Box.new():withContentSize(20)
-    end
 end
 
 ---@protected
 ---@return boolean
 function ToolbarHeaderButton:isLocked()
-    return self:element().style.maximal_width == 16
+    return ToolbarHeaderButton.isLockedElement(self:element())
+end
+
+---@private
+---@param element LuaGuiElement
+function ToolbarHeaderButton.isLockedElement(element)
+    return element.style.maximal_width == ToolbarHeaderButton.__lockedBox:totalWidth()
+end
+
+function ToolbarHeaderButton:lock()
+    self:element().style.size = ToolbarHeaderButton.__lockedBox:totalWidth()
+    self:setBox(ToolbarHeaderButton.__lockedBox)
+end
+
+function ToolbarHeaderButton:unlock()
+    self:element().style.size = ToolbarHeaderButton.__unlockedBox:totalWidth()
+    self:setBox(ToolbarHeaderButton.__unlockedBox)
 end
 
 ---@protected

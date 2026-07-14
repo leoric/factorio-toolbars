@@ -7,12 +7,14 @@ import("gui.toolbar.content.sections.section.header.SectionHeader")
 ---@field private _section Section
 SectionHeaderButton = Leaf:extendAs("gui.toolbar.content.sections.section.header.Button")
 
-function SectionHeaderButton.new(parent, element)
-    return SectionHeaderButton:super(Leaf.new(parent, element))
+---@protected
+---@param element LuaGuiElement
+---@return SectionHeaderButton
+function SectionHeaderButton.new(element)
+    return SectionHeaderButton:super(Leaf.new(element, Toolbars.styles.common.button.box))
 end
 
-function SectionHeaderButton:initilize()
-    self:setBox(Toolbars.styles.common.button.box)
+function SectionHeaderButton:initialize()
     self._header = self:ancestor(SectionHeader)
     self._section = self:ancestor(Section)
 end

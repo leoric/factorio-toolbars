@@ -75,6 +75,7 @@ end
 
 ---@public
 ---@param luaPlayer LuaPlayer
+---@return Player
 function Player.new(luaPlayer)
     local this = Player:super(Object.new())
     this._luaPlayer = luaPlayer

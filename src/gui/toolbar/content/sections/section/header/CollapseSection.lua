@@ -4,6 +4,9 @@ import("gui.toolbar.content.sections.section.header.SectionHeaderButton")
 ---@class CollapseSection : SectionHeaderButton
 CollapseSection = SectionHeaderButton:extendAs("gui.toolbar.content.sections.section.header.Collapse")
 
+---@public
+---@param parent Component
+---@return CollapseSection
 function CollapseSection.create(parent)
     return SectionHeaderButton.create(
             CollapseSection,
@@ -16,12 +19,15 @@ function CollapseSection.create(parent)
     )
 end
 
-function CollapseSection.new(parent, element)
-    return CollapseSection:super(SectionHeaderButton.new(parent, element))
+---@protected
+---@param element LuaGuiElement
+---@return CollapseSection
+function CollapseSection.new(element)
+    return CollapseSection:super(SectionHeaderButton.new(element))
 end
 
-function CollapseSection:initilize()
-    CollapseSection:super().initilize(self)
+function CollapseSection:initialize()
+    CollapseSection:super().initialize(self)
     self:migrateTo_2_16_0()
 end
 

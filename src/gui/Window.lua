@@ -3,6 +3,13 @@ import("gui.VerticalContainer")
 ---@class Window : VerticalContainer
 Window = VerticalContainer:extendAs("gui.Window")
 
+---@protected
+---@generic C : Component
+---@param class C
+---@param parent Component
+---@param style string
+---@param builder fun(instance: C):void optional
+---@return C
 function Window.create(class, parent, style, builder)
     return VerticalContainer.create(
             class,
@@ -15,8 +22,13 @@ function Window.create(class, parent, style, builder)
     )
 end
 
-function Window.new(parent, element, childrenClasses)
-    return Window:super(VerticalContainer.new(parent, element, childrenClasses))
+---@protected
+---@param element LuaGuiElement
+---@param childrenClasses Component[]
+---@param box Box
+---@return Window
+function Window.new(element, childrenClasses, box)
+    return Window:super(VerticalContainer.new(element, childrenClasses, box))
 end
 
 function Window:onElementLocationChanged(_)
@@ -85,11 +97,11 @@ function Window:centerOnScreen()
     self:element().force_auto_center()
 end
 
-function Window:onWidthChange()
+function Window:onWidthChanged()
     local isDockedToLeft = self:isDockedToLeft()
     local isDockedToRight = self:isDockedToRight()
 
-    Window:super().onWidthChange(self)
+    Window:super().onWidthChanged(self)
 
     if self:displayWidth() > self:display():resolution():width() then
         self:dockToRight()
@@ -102,14 +114,14 @@ function Window:onWidthChange()
     end
 end
 
-function Window:onHeightChange()
+function Window:onHeightChanged()
     local isDockedToTop = self:isDockedToTop()
     local isDockedToBottom = self:isDockedToBottom()
 
     local previousY = self:location().y
     local previousDisplayHeight = self:displayHeight()
 
-    Window:super().onHeightChange(self)
+    Window:super().onHeightChanged(self)
 
     if self:displayHeight() > self:display():resolution():height() then
         if self:isAlignedTop() then

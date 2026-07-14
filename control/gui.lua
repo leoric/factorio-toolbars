@@ -35,7 +35,7 @@ end)
 script.on_event(defines.events.on_gui_click, function(event)
     local click = Click.new(event)
     if click:isForModElement() then
-        Player.get(event.player_index):gui():handleClick(click)
+        Player.get(event.player_index):gui():dispatchClick(click)
     end
 end)
 
@@ -43,7 +43,7 @@ end)
 script.on_event(defines.events.on_gui_elem_changed, function(event)
     local elementChanged = ElementChanged.new(event)
     if elementChanged:isForModElement() then
-        Player.get(event.player_index):gui():handleElementChanged(elementChanged)
+        Player.get(event.player_index):gui():dispatchElementChanged(elementChanged)
     end
 end)
 
@@ -51,7 +51,7 @@ end)
 script.on_event(defines.events.on_gui_location_changed, function(event)
     local elementLocationChanged = ElementLocationChanged.new(event)
     if elementLocationChanged:isForModElement() then
-        Player.get(event.player_index):gui():handleElementLocationChanged(elementLocationChanged)
+        Player.get(event.player_index):gui():dispatchElementLocationChanged(elementLocationChanged)
     end
 end)
 
@@ -59,7 +59,7 @@ end)
 script.on_event(defines.events.on_gui_hover, function(event)
     local hovered = Hovered.new(event)
     if hovered:isForModElement() then
-        Player.get(event.player_index):gui():handleHover(hovered)
+        Player.get(event.player_index):gui():dispatchHover(hovered)
     end
 end)
 
@@ -67,6 +67,6 @@ end)
 script.on_event(defines.events.on_gui_leave, function(event)
     local left = Left.new(event)
     if left:isForModElement() then
-        Player.get(event.player_index):gui():handleLeave(left)
+        Player.get(event.player_index):gui():dispatchLeave(left)
     end
 end)

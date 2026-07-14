@@ -3,6 +3,9 @@
 ---@field private _subscribersTopics table<Object, string>
 EventBus = Object:extendAs("EventBus")
 
+
+---@public
+---@return EventBus
 function EventBus.new()
     local this = EventBus:super(Object.new())
     this._topics = {}

@@ -6,6 +6,7 @@ Item = Thing:extendAs("Item")
 ---@public
 ---@param name string
 ---@param quality string optional
+---@return Item
 function Item.new(name, quality)
     local this = Item:super(Thing.new(name))
     this._quality = quality and quality or "normal"

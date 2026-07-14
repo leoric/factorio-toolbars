@@ -11,8 +11,8 @@ MainInventory = Inventory:extendAs("player.inventory.personal.editor.MainInvento
 MainInventory.__icon = Icon.new("entity", "character")
 
 ---@public
----@return MainInventory
 ---@param player Player
+---@return MainInventory
 function MainInventory.new(player)
     local this = MainInventory:super(Inventory.new(player))
     this._player = player

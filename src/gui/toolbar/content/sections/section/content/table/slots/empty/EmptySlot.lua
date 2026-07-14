@@ -9,6 +9,9 @@ import("gui.toolbar.content.sections.section.content.table.slots.tools.simple.Si
 ---@class EmptySlot : Slot
 EmptySlot = Slot:extendAs("gui.toolbar.content.sections.section.content.table.slots.empty.EmptySlot")
 
+---@public
+---@param parent Component
+---@return EmptySlot
 function EmptySlot.create(parent)
     return Slot.create(
             EmptySlot,
@@ -19,8 +22,11 @@ function EmptySlot.create(parent)
     )
 end
 
-function EmptySlot.new(parent, root)
-    return EmptySlot:super(Slot.new(parent, root, { EmptyButton }))
+---@protected
+---@param element LuaGuiElement
+---@return EmptySlot
+function EmptySlot.new(element)
+    return EmptySlot:super(Slot.new(element, { EmptyButton }))
 end
 
 function EmptySlot:onElementChanged()

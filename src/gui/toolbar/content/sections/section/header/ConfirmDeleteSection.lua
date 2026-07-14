@@ -3,6 +3,9 @@ import("gui.toolbar.content.sections.section.header.SectionHeaderButton")
 ---@class ConfirmDeleteSection : SectionHeaderButton
 ConfirmDeleteSection = SectionHeaderButton:extendAs("gui.toolbar.content.sections.section.header.ConfirmDelete")
 
+---@public
+---@param parent Component
+---@return ConfirmDeleteSection
 function ConfirmDeleteSection.create(parent)
     return SectionHeaderButton.create(
             ConfirmDeleteSection,
@@ -15,8 +18,11 @@ function ConfirmDeleteSection.create(parent)
     )
 end
 
-function ConfirmDeleteSection.new(parent, element)
-    return ConfirmDeleteSection:super(SectionHeaderButton.new(parent, element))
+---@protected
+---@param element LuaGuiElement
+---@return CancelDeleteSection
+function ConfirmDeleteSection.new(element)
+    return ConfirmDeleteSection:super(SectionHeaderButton.new(element))
 end
 
 function ConfirmDeleteSection:onClick(click)

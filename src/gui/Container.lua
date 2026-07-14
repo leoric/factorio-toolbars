@@ -3,15 +3,24 @@ import("gui.Sized")
 ---@class Container : Sized
 Container = Sized:extendAs("gui.Container")
 
-function Container.new(parent, element, childrenClasses)
-    return Container:super(Sized.new(parent, element, childrenClasses))
+---@protected
+---@param element LuaGuiElement
+---@param childrenClasses Component[]
+---@param box Box
+function Container.new(element, childrenClasses, box)
+    return Container:super(Sized.new(element, childrenClasses, box))
 end
 
---function Container:addChild(child)
---fireSizeChanged() is execute in Sized.create() when the child is fully initialized as Sized object
+-----@protected
+-----@param childToAdd Component
+--function Container:addChild(childToAdd)
+--    Container:super().addChild(self, childToAdd)
+--    self:fireSizeChanged()
 --end
 
+---@protected
+---@param childToRemove Component
 function Container:removeChild(childToRemove)
     Container:super().removeChild(self, childToRemove)
-    self:fireSizeChange()
+    self:fireSizeChanged()
 end

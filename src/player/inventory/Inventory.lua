@@ -6,8 +6,8 @@ Inventory = Object:extendAs("player.inventory.Inventory")
 Inventory.__emptyPlans = {}
 
 ---@protected
----@return Inventory
 ---@param player Player
+---@return Inventory
 function Inventory.new(player)
     local this = Inventory:super(Object.new())
     this._player = player
