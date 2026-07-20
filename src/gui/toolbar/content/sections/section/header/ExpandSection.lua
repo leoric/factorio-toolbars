@@ -4,6 +4,9 @@ import("gui.toolbar.content.sections.section.header.SectionHeaderButton")
 ---@class ExpandSection : SectionHeaderButton
 ExpandSection = SectionHeaderButton:extendAs("gui.toolbar.content.sections.section.header.Expand")
 
+---@public
+---@param parent Component
+---@return ExpandSection
 function ExpandSection.create(parent)
     return SectionHeaderButton.create(
             ExpandSection,
@@ -16,8 +19,11 @@ function ExpandSection.create(parent)
     )
 end
 
-function ExpandSection.new(parent, element)
-    return ExpandSection:super(SectionHeaderButton.new(parent, element))
+---@protected
+---@param element LuaGuiElement
+---@return ExpandSection
+function ExpandSection.new(element)
+    return ExpandSection:super(SectionHeaderButton.new(element))
 end
 
 function ExpandSection:onClick(click)

@@ -7,9 +7,11 @@ Gui = StackedContainer:extendAs("gui.Gui")
 
 ---@public
 ---@param player Player
+---@return Gui
 function Gui.new(player)
-    local this = Gui:super(StackedContainer.new(nil, player:luaPlayer().gui.screen, { Toolbar }))
+    local this = Gui:super(StackedContainer.new(player:luaPlayer().gui.screen, { Toolbar }))
     this:setPlayer(player)
+    this:setGui(this)
     this._descendantsByElementIndex = {}
     return this
 end
@@ -26,12 +28,40 @@ function Gui:load()
         end
     end
     self:propagateInitialization()
-    self:fireSizeChange()
+    self:fireSizeChanged()
 end
 
 ---@public
 function Gui:createToolbar()
     return Toolbar.create(self):centerOnScreen()
+end
+
+---@public
+---@return string
+function Gui:exportToolbarsJson()
+    local toolbars = {}
+    for _, toolbar in ipairs(self:toolbars()) do
+        table.insert(toolbars, toolbar:exportState())
+    end
+    return helpers.table_to_json({ toolbars = toolbars })
+end
+
+---@public
+---@param jsonText string
+---@return boolean success
+function Gui:importToolbarsFromJson(jsonText)
+    local success, decoded = pcall(helpers.json_to_table, jsonText)
+    if not success or type(decoded) ~= "table" or type(decoded.toolbars) ~= "table" then
+        return false
+    end
+
+    self:clear()
+    for _, toolbarState in ipairs(decoded.toolbars) do
+        if type(toolbarState) == "table" then
+            Toolbar.create(self):applyState(toolbarState)
+        end
+    end
+    return true
 end
 
 ---@public
@@ -82,7 +112,7 @@ end
 
 ---@public
 ---@param click Click
-function Gui:handleClick(click)
+function Gui:dispatchClick(click)
     local component = self._descendantsByElementIndex[click:elementIndex()]
     if component then
         component:propagateOnClick(click)
@@ -91,7 +121,7 @@ end
 
 ---@public
 ---@param elementChanged ElementChanged
-function Gui:handleElementChanged(elementChanged)
+function Gui:dispatchElementChanged(elementChanged)
     local component = self._descendantsByElementIndex[elementChanged:elementIndex()]
     if component then
         component:propagateOnElementChanged()
@@ -100,7 +130,7 @@ end
 
 ---@public
 ---@param elementLocationChanged ElementLocationChanged
-function Gui:handleElementLocationChanged(elementLocationChanged)
+function Gui:dispatchElementLocationChanged(elementLocationChanged)
     local component = self._descendantsByElementIndex[elementLocationChanged:elementIndex()]
     if component then
         component:propagateOnElementLocationChanged()
@@ -109,7 +139,7 @@ end
 
 ---@public
 ---@param hovered Hovered
-function Gui:handleHover(hovered)
+function Gui:dispatchHover(hovered)
     local component = self._descendantsByElementIndex[hovered:elementIndex()]
     if component then
         component:propagateOnHover()
@@ -118,7 +148,7 @@ end
 
 ---@public
 ---@param left Left
-function Gui:handleLeave(left)
+function Gui:dispatchLeave(left)
     local component = self._descendantsByElementIndex[left:elementIndex()]
     if component then
         component:propagateOnLeave()

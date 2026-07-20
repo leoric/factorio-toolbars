@@ -302,10 +302,6 @@ Tooltip._.controls.common = LocalisedText
         :append("________________________________")
         :appendNewLine()
 
---:append({ "key-sequences.open-factoriopedia" })
---:append(RichText.keySequence(": "))
---:append({ "controls.open-factoriopedia" })
-
         :append({ "key-sequences.cycle-quality-up" })
         :append(RichText.keySequence(": "))
         :append({ "controls.cycle-quality-up" })
@@ -352,6 +348,12 @@ Tooltip._.controls.crafting = LocalisedText
         :append({ "controls.craft-all" })
         :append("/2")
 
+Tooltip._.controls.minor = LocalisedText
+        .new()
+        :append({ "key-sequences.open-factoriopedia" })
+        :append(RichText.keySequence(": "))
+        :append({ "controls.open-factoriopedia" })
+
 Tooltip._.controls.settingsHint = LocalisedText
         .new()
         :append(RichText.fontSmall("(hide controls in settings)"))
@@ -363,10 +365,16 @@ Tooltip._.controls.withCrafting = LocalisedText
         :appendNewLine()
         :concat(Tooltip._.controls.crafting)
         :appendNewLine()
+        :appendNewLine()
+        :concat(Tooltip._.controls.minor)
+        :appendNewLine()
         :concat(Tooltip._.controls.settingsHint)
 
 Tooltip._.controls.withoutCrafting = LocalisedText
         .new()
         :concat(Tooltip._.controls.common)
+        :appendNewLine()
+        :appendNewLine()
+        :concat(Tooltip._.controls.minor)
         :appendNewLine()
         :concat(Tooltip._.controls.settingsHint)

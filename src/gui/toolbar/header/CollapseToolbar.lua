@@ -3,6 +3,9 @@ import("gui.toolbar.header.ToolbarHeaderButton")
 ---@class CollapseToolbar : ToolbarHeaderButton
 CollapseToolbar = ToolbarHeaderButton:extendAs("gui.toolbar.header.Collapse")
 
+---@public
+---@param parent Component
+---@return CollapseToolbar
 function CollapseToolbar.create(parent)
     return ToolbarHeaderButton.create(
             CollapseToolbar,
@@ -14,12 +17,15 @@ function CollapseToolbar.create(parent)
     )
 end
 
-function CollapseToolbar.new(parent, root)
-    return CollapseToolbar:super(ToolbarHeaderButton.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return CollapseToolbar
+function CollapseToolbar.new(element)
+    return CollapseToolbar:super(ToolbarHeaderButton.new(element))
 end
 
-function CollapseToolbar:initilize()
-    CollapseToolbar:super().initilize(self)
+function CollapseToolbar:initialize()
+    CollapseToolbar:super().initialize(self)
     if self:toolbar():isAlignedTop() then
         self:alignTop()
     else

@@ -7,6 +7,8 @@ import("gui.toolbar.header.CollapseToolbar")
 import("gui.toolbar.header.ConfirmDeleteToolbar")
 import("gui.toolbar.header.DeleteToolbar")
 import("gui.toolbar.header.ExpandToolbar")
+import("gui.toolbar.header.ExportToolbar")
+import("gui.toolbar.header.ImportToolbar")
 import("gui.toolbar.header.Lock")
 import("gui.toolbar.header.OneSectionMode")
 import("gui.toolbar.header.ToolbarDrag")
@@ -15,6 +17,9 @@ import("gui.toolbar.header.Unlock")
 ---@class ToolbarHeader : HorizontalContainer
 ToolbarHeader = HorizontalContainer:extendAs("gui.toolbar.header.Header")
 
+---@public
+---@param parent Component
+---@return ToolbarHeader
 function ToolbarHeader.create(parent)
     return HorizontalContainer.create(
             ToolbarHeader,
@@ -28,28 +33,34 @@ function ToolbarHeader.create(parent)
                 AlignBottom.create(instance)
                 ToolbarDrag.create(instance)
                 OneSectionMode.create(instance)
+                ImportToolbar.create(instance)
+                ExportToolbar.create(instance)
                 CollapseToolbar.create(instance)
                 DeleteToolbar.create(instance)
             end
     )
 end
 
-function ToolbarHeader.new(parent, root)
+---@protected
+---@param element LuaGuiElement
+---@return ToolbarHeader
+function ToolbarHeader.new(element)
     return ToolbarHeader:super(HorizontalContainer.new(
-            parent,
-            root,
+            element,
             { Lock, Unlock,
               AlignBottom, AlignTop,
               ToolbarDrag,
               OneSectionMode,
+              ImportToolbar, ExportToolbar,
               CollapseToolbar, ExpandToolbar,
               DeleteToolbar, CancelDeleteToolbar, ConfirmDeleteToolbar
             }))
 end
 
-function ToolbarHeader:initilize()
+function ToolbarHeader:initialize()
     self:migrateTo_2_12_0()
     self:migrateTo_2_19_0()
+    self:migrateTo_2_40_0()
 end
 
 ---@private
@@ -68,6 +79,18 @@ function ToolbarHeader:migrateTo_2_19_0()
         OneSectionMode.create(self, 4)
         if self:isLocked() then
             self:child(OneSectionMode):lock()
+        end
+    end
+end
+
+---@private
+function ToolbarHeader:migrateTo_2_40_0()
+    if not self:child(ImportToolbar) then
+        local import = ImportToolbar.create(self, 5)
+        local export = ExportToolbar.create(self, 6)
+        if self:isLocked() then
+            import:lock()
+            export:lock()
         end
     end
 end

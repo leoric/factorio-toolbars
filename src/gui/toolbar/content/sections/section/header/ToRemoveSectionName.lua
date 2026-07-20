@@ -7,6 +7,9 @@ import("gui.toolbar.content.sections.section.header.SectionNameUnlocked")
 ---@class ToRemoveSectionName : SectionHeaderButton
 ToRemoveSectionName = SectionHeaderButton:extendAs("gui.toolbar.content.sections.section.header.Name")
 
+---@public
+---@param parent Component
+---@return ToRemoveSectionName
 function ToRemoveSectionName.create(parent)
     return SectionHeaderButton.create(
             ToRemoveSectionName,
@@ -21,8 +24,11 @@ function ToRemoveSectionName.create(parent)
     )
 end
 
-function ToRemoveSectionName.new(parent, element)
-    return ToRemoveSectionName:super(SectionHeaderButton.new(parent, element))
+---@protected
+---@param element LuaGuiElement
+---@return ToRemoveSectionName
+function ToRemoveSectionName.new(element)
+    return ToRemoveSectionName:super(SectionHeaderButton.new(element))
 end
 
 function ToRemoveSectionName:lock()
@@ -37,4 +43,10 @@ end
 ---@return string
 function ToRemoveSectionName:text()
     return self:element().text
+end
+
+---@public
+---@param text string
+function ToRemoveSectionName:setText(text)
+    self:element().text = text
 end

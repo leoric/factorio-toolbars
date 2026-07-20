@@ -20,8 +20,11 @@ function SpidertronRemoteCountOverlay.create(parent, unitsCount)
     )
 end
 
-function SpidertronRemoteCountOverlay.new(parent, root)
-    return SpidertronRemoteCountOverlay:super(Component.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return SpidertronRemoteCountOverlay
+function SpidertronRemoteCountOverlay.new(element)
+    return SpidertronRemoteCountOverlay:super(Component.new(element))
 end
 
 ---@public

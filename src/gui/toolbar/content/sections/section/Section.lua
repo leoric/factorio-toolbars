@@ -10,6 +10,10 @@ import("gui.toolbar.content.sections.section.content.SectionContent")
 ---@class Section : VerticalContainer
 Section = VerticalContainer:extendAs("gui.toolbar.content.sections.section.Section")
 
+---@public
+---@param parent Component
+---@param ontoStart boolean
+---@return Section
 function Section.create(parent, ontoStart)
     return VerticalContainer.create(
             Section,
@@ -26,20 +30,21 @@ function Section.create(parent, ontoStart)
     )
 end
 
-function Section.new(parent, element)
-    return Section:super(VerticalContainer.new(parent, element, { SectionHeader, SectionContent }))
+---@protected
+---@param element LuaGuiElement
+---@return Section
+function Section.new(element)
+    return Section:super(VerticalContainer.new(element, { SectionHeader, SectionContent }, Toolbars.styles.toolbar.content.sections.section.box))
 end
 
-function Section:initilize()
-    self:setBox(Toolbars.styles.toolbar.content.sections.section.box)
-end
-
+---@public
 function Section:moveDown()
     if #self:siblingsAndMe() > self:index() then
         self:parent():element().swap_children(self:index(), self:index() + 1)
     end
 end
 
+---@public
 function Section:moveUp()
     if self:index() > 1 then
         self:parent():element().swap_children(self:index(), self:index() - 1)
@@ -80,6 +85,39 @@ end
 ---@return string
 function Section:name()
     return self:header():name()
+end
+
+---@public
+---@param name string
+function Section:setName(name)
+    self:header():setName(name)
+end
+
+---@public
+---@return table
+function Section:exportState()
+    return {
+        name = self:name(),
+        collapsed = not self:content():isVisible(),
+        items = self:content():table():exportItems()
+    }
+end
+
+---@public
+---@param state table
+function Section:applyState(state)
+    if type(state) ~= "table" then
+        return
+    end
+    if type(state.name) == "string" and state.name ~= "" then
+        self:setName(state.name)
+    end
+    if type(state.items) == "table" then
+        self:content():table():applyItems(state.items)
+    end
+    if state.collapsed then
+        self:collapse()
+    end
 end
 
 ---@private

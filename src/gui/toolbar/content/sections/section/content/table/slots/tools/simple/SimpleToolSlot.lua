@@ -9,6 +9,7 @@ SimpleToolSlot = Slot:extendAs("gui.toolbar.content.sections.section.content.tab
 ---@public
 ---@param parent Component
 ---@param simpleTool SimpleTool
+---@return SimpleToolSlot
 function SimpleToolSlot.create(parent, simpleTool)
     return Slot.create(
             SimpleToolSlot,
@@ -19,12 +20,15 @@ function SimpleToolSlot.create(parent, simpleTool)
     )
 end
 
-function SimpleToolSlot.new(parent, root)
-    return SimpleToolSlot:super(Slot.new(parent, root, { SimpleToolButton }))
+---@protected
+---@param element LuaGuiElement
+---@return SimpleToolSlot
+function SimpleToolSlot.new(element)
+    return SimpleToolSlot:super(Slot.new(element, { SimpleToolButton }))
 end
 
-function SimpleToolSlot:initilize()
-    SimpleToolSlot:super().initilize(self)
+function SimpleToolSlot:initialize()
+    SimpleToolSlot:super().initialize(self)
 
     self:setControls({ [Pick] = function() self:pick() end })
 

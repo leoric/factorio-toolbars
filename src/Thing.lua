@@ -4,6 +4,7 @@ Thing = Object:extendAs("Thing")
 
 ---@public
 ---@param name string
+---@return Thing
 function Thing.new(name)
     local this = Thing:super(Object.new())
     this._name = name

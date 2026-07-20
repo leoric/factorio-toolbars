@@ -25,8 +25,10 @@ import("gui.toolbar.content.sections.section.content.table.slots.item.Tooltip")
 ---@field private _tooltip Tooltip
 ItemSlot = Slot:extendAs("gui.toolbar.content.sections.section.content.table.slots.item.ItemSlot")
 
+---@public
 ---@param parent Component
 ---@param item Item
+---@return ItemSlot
 function ItemSlot.create(parent, item)
     return Slot.create(
             ItemSlot,
@@ -44,8 +46,11 @@ function ItemSlot.create(parent, item)
     )
 end
 
-function ItemSlot.new(parent, root)
-    return ItemSlot:super(Slot.new(parent, root, {
+---@protected
+---@param element LuaGuiElement
+---@return ItemSlot
+function ItemSlot.new(element)
+    return ItemSlot:super(Slot.new(element, {
         ItemButton, QualityOverlay, CountOverlay, DimOverlay
     }))
 end
@@ -75,8 +80,8 @@ function ItemSlot:migrateTo_2_32_0()
     end
 end
 
-function ItemSlot:initilize()
-    ItemSlot:super().initilize(self)
+function ItemSlot:initialize()
+    ItemSlot:super().initialize(self)
     self._item = self:loadItem()
 
     if self:deleteIfTheItemIsUnknown() then return end

@@ -4,6 +4,9 @@ import("gui.toolbar.Toolbar")
 ---@class ToolbarDrag : Leaf
 ToolbarDrag = Leaf:extendAs("gui.toolbar.header.ToolbarDrag")
 
+---@public
+---@param parent Component
+---@return ToolbarDrag
 function ToolbarDrag.create(parent)
     return Leaf.create(
             ToolbarDrag,
@@ -18,8 +21,11 @@ function ToolbarDrag.create(parent)
     )
 end
 
-function ToolbarDrag.new(parent, root)
-    return ToolbarDrag:super(Leaf.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return ToolbarDrag
+function ToolbarDrag.new(element)
+    return ToolbarDrag:super(Leaf.new(element))
 end
 
 function ToolbarDrag:onDoubleLeftClick()

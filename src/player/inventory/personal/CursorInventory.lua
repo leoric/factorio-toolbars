@@ -8,9 +8,10 @@ import("player.inventory.Inventory")
 ---@field private _upToDate boolean
 CursorInventory = Inventory:extendAs("player.inventory.personal.CursorInventory")
 CursorInventory.__icon = Icon.new("img", "utility/hand")
+
 ---@public
----@return CursorInventory
 ---@param player Player
+---@return CursorInventory
 function CursorInventory.new(player)
     local this = CursorInventory:super(Inventory.new(player))
     this._player = player

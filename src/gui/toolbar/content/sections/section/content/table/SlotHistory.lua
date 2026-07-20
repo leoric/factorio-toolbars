@@ -2,6 +2,7 @@
 ---@field private _lastPickedSlot Slot
 SlotHistory = Object:extendAs("gui.toolbar.content.sections.section.content.table.SlotHistory")
 
+---@public
 ---@param player_index number
 function SlotHistory:getInstanceFor(player_index)
     if SlotHistory.__perPlayer == nil then

@@ -6,6 +6,9 @@ import("gui.toolbar.Toolbar")
 ---@field private _toolbar Toolbar
 AddSection = Leaf:extendAs("gui.toolbar.content.AddSection")
 
+---@public
+---@param parent Component
+---@return AddSection
 function AddSection.create(parent)
     return Leaf.create(
             AddSection,
@@ -21,12 +24,14 @@ function AddSection.create(parent)
     )
 end
 
-function AddSection.new(parent, element)
-    return AddSection:super(Leaf.new(parent, element))
+---@protected
+---@param element LuaGuiElement
+---@return AddSection
+function AddSection.new(element)
+    return AddSection:super(Leaf.new(element, Toolbars.styles.toolbar.content.addSection.box))
 end
 
-function AddSection:initilize()
-    self:setBox(Toolbars.styles.toolbar.content.addSection.box)
+function AddSection:initialize()
     self._toolbar = self:ancestor(Toolbar)
 end
 

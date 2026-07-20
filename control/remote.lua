@@ -83,5 +83,17 @@ remote.add_interface(Toolbars.name, {
         Log.log(toolbarString == retrievedToolbarString)
         Log.log(string.len(toolbarString))
     end,
+
+    benchmarkLock = function(player_index)
+        local toolbar = Player.get(player_index):gui():toolbars()[1]
+        local profiler = helpers.create_profiler()
+        for _ = 1, 100 do
+            toolbar:unlock()
+            toolbar:lock()
+        end
+        profiler.stop()
+        profiler.divide(100)
+        Log.log(profiler)
+    end,
 }
 )

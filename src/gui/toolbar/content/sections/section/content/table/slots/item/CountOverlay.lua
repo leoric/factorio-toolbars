@@ -3,6 +3,7 @@ import("gui.Component")
 ---@class CountOverlay : Component
 CountOverlay = Component:extendAs("gui.toolbar.content.sections.section.content.table.slots.item.CountOverlay")
 
+---@public
 ---@param parent Component
 ---@return CountOverlay
 function CountOverlay.create(parent)
@@ -17,8 +18,11 @@ function CountOverlay.create(parent)
     )
 end
 
-function CountOverlay.new(parent, root)
-    return CountOverlay:super(Component.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return CountOverlay
+function CountOverlay.new(element)
+    return CountOverlay:super(Component.new(element))
 end
 
 ---@public

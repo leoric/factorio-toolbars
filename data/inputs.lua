@@ -23,6 +23,22 @@ data:extend {
         localised_name = "Toggle toolbar header",
         localised_description = "Hide/Show the header of a toolbar under the cursor",
         key_sequence = "",
+    },
+    {
+        order = "a4",
+        type = "custom-input",
+        name = Toolbars.controls.exportAllToolbars,
+        localised_name = "Export all toolbars",
+        localised_description = "Copy all toolbars, their items and their state to the clipboard",
+        key_sequence = "",
+    },
+    {
+        order = "a5",
+        type = "custom-input",
+        name = Toolbars.controls.importAllToolbars,
+        localised_name = "Import all toolbars",
+        localised_description = "Replace all toolbars with the ones pasted from the clipboard",
+        key_sequence = "",
     }
 }
 

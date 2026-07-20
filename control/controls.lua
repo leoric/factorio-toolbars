@@ -18,6 +18,16 @@ script.on_event(Toolbars.controls.toggleToolbars, function(event)
 end)
 
 ---@param event EventData
+script.on_event(Toolbars.controls.exportAllToolbars, function(event)
+    Player.get(event.player_index):exportAllToolbars()
+end)
+
+---@param event EventData
+script.on_event(Toolbars.controls.importAllToolbars, function(event)
+    Player.get(event.player_index):importAllToolbars()
+end)
+
+---@param event EventData
 script.on_event(Toolbars.controls.toggleToolbarHeader, function(event)
     Player.get(event.player_index):eventBus():publish(ToggleToolbarHeader)
 end)

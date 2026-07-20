@@ -3,6 +3,9 @@
 ---@field private _height number
 Resolution = Object:extendAs("player.Resolution")
 
+---@public
+---@param width number
+---@param height number
 ---@return Resolution
 function Resolution.new(width, height)
     local this = Resolution:super(Object.new())

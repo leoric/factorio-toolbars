@@ -3,6 +3,9 @@ import("gui.toolbar.content.sections.section.header.SectionHeaderButton")
 ---@class MoveUp : SectionHeaderButton
 MoveUp = SectionHeaderButton:extendAs("gui.toolbar.content.sections.section.header.MoveUp")
 
+---@public
+---@param parent Component
+---@return MoveUp
 function MoveUp.create(parent)
     return SectionHeaderButton.create(
             MoveUp,
@@ -15,8 +18,11 @@ function MoveUp.create(parent)
     )
 end
 
-function MoveUp.new(parent, element)
-    return MoveUp:super(SectionHeaderButton.new(parent, element))
+---@protected
+---@param element LuaGuiElement
+---@return MoveUp
+function MoveUp.new(element)
+    return MoveUp:super(SectionHeaderButton.new(element))
 end
 
 function MoveUp:onClick(click)

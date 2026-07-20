@@ -8,7 +8,7 @@ SectionNameLocked = SectionHeaderButton:extendAs("gui.toolbar.content.sections.s
 ---@public
 ---@param parent Component
 ---@param text string
----@return self
+---@return SectionNameLocked
 function SectionNameLocked.create(parent, text)
     return SectionHeaderButton.create(
             SectionNameLocked,
@@ -23,8 +23,11 @@ function SectionNameLocked.create(parent, text)
     )
 end
 
-function SectionNameLocked.new(parent, element)
-    return SectionNameLocked:super(SectionHeaderButton.new(parent, element))
+---@protected
+---@param element LuaGuiElement
+---@return SectionNameLocked
+function SectionNameLocked.new(element)
+    return SectionNameLocked:super(SectionHeaderButton.new(element))
 end
 
 function SectionNameLocked:unlock()
@@ -35,4 +38,10 @@ end
 ---@return string
 function SectionNameLocked:text()
     return self:element().text
+end
+
+---@public
+---@param text string
+function SectionNameLocked:setText(text)
+    self:element().text = text
 end

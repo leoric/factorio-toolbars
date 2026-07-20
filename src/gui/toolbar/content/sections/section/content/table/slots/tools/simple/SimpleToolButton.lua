@@ -5,9 +5,11 @@ import("SimpleTool")
 ---@field private _tool SimpleTool
 SimpleToolButton = Component:extendAs("gui.toolbar.content.sections.section.content.table.slots.tool.SimpleToolButton")
 
+---@public
 ---@param parent Component
 ---@param simpleTool SimpleTool
 ---@param mouse_button_filter string[]
+---@return SimpleToolButton
 function SimpleToolButton.create(parent, simpleTool, mouse_button_filter)
     return Component.create(
             SimpleToolButton,
@@ -23,11 +25,14 @@ function SimpleToolButton.create(parent, simpleTool, mouse_button_filter)
     )
 end
 
-function SimpleToolButton.new(parent, root)
-    return SimpleToolButton:super(Component.new(parent, root))
+---@protected
+---@param element LuaGuiElement
+---@return SimpleToolButton
+function SimpleToolButton.new(element)
+    return SimpleToolButton:super(Component.new(element))
 end
 
-function SimpleToolButton:initilize()
+function SimpleToolButton:initialize()
     self._tool = SimpleTool.new(self:element().elem_tooltip.name)
 end
 

@@ -11,8 +11,9 @@ import("SpidertronRemote")
 ---@field private _previousThingCount number
 Cursor = Object:extendAs("player.Cursor")
 
----@return Cursor
+---@public
 ---@param luaPlayer LuaPlayer
+---@return Cursor
 function Cursor.new(luaPlayer)
     local this = Cursor:super(Object.new())
     this._luaPlayer = luaPlayer

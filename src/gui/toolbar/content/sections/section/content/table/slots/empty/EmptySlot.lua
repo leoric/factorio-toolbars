@@ -9,6 +9,9 @@ import("gui.toolbar.content.sections.section.content.table.slots.tools.simple.Si
 ---@class EmptySlot : Slot
 EmptySlot = Slot:extendAs("gui.toolbar.content.sections.section.content.table.slots.empty.EmptySlot")
 
+---@public
+---@param parent Component
+---@return EmptySlot
 function EmptySlot.create(parent)
     return Slot.create(
             EmptySlot,
@@ -19,8 +22,11 @@ function EmptySlot.create(parent)
     )
 end
 
-function EmptySlot.new(parent, root)
-    return EmptySlot:super(Slot.new(parent, root, { EmptyButton }))
+---@protected
+---@param element LuaGuiElement
+---@return EmptySlot
+function EmptySlot.new(element)
+    return EmptySlot:super(Slot.new(element, { EmptyButton }))
 end
 
 function EmptySlot:onElementChanged()
@@ -78,6 +84,22 @@ function EmptySlot:setSimpleTool(simpleTool)
     local simpleToolSlot = SimpleToolSlot.create(self:parent(), simpleTool)
     self:replaceWith(simpleToolSlot)
     simpleToolSlot:fireTableChange()
+end
+
+---@public
+---@param item Item
+function EmptySlot:fillWithItem(item)
+    self:setItem(item)
+end
+
+---Like fillWithItem, but doesn't fire a table-changed/resize event. Used when
+---placing many items in a row during full-state reconstruction, where the
+---caller will trigger a single resize once everything has been placed.
+---@public
+---@param item Item
+function EmptySlot:fillWithItemSilently(item)
+    local itemSlot = ItemSlot.create(self:parent(), item)
+    self:replaceWith(itemSlot)
 end
 
 function EmptySlot:thing()

@@ -3,6 +3,9 @@ import("gui.toolbar.header.ToolbarHeaderButton")
 ---@class CancelDeleteToolbar : ToolbarHeaderButton
 CancelDeleteToolbar = ToolbarHeaderButton:extendAs("gui.toolbar.header.CancelDelete")
 
+---@public
+---@param parent Component
+---@return CancelDeleteToolbar
 function CancelDeleteToolbar.create(parent)
     return ToolbarHeaderButton.create(
             CancelDeleteToolbar,
@@ -15,8 +18,11 @@ function CancelDeleteToolbar.create(parent)
     )
 end
 
-function CancelDeleteToolbar.new(parent, root)
-    return CancelDeleteToolbar:super(ToolbarHeaderButton.new(parent, root))
+---@public
+---@param element LuaGuiElement
+---@return CancelDeleteToolbar
+function CancelDeleteToolbar.new(element)
+    return CancelDeleteToolbar:super(ToolbarHeaderButton.new(element))
 end
 
 function CancelDeleteToolbar:onClick(click)

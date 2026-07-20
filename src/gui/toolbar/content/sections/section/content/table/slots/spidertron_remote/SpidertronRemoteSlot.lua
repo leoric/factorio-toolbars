@@ -16,6 +16,7 @@ SpidertronRemoteSlot.__serializedSpidertronRemoteTagName = "spidertron-remote"
 ---@public
 ---@param parent Component
 ---@param spidertronRemote SpidertronRemote
+---@return SpidertronRemoteSlot
 function SpidertronRemoteSlot.create(parent, spidertronRemote)
     return Slot.create(
             SpidertronRemoteSlot,
@@ -30,16 +31,19 @@ function SpidertronRemoteSlot.create(parent, spidertronRemote)
     )
 end
 
-function SpidertronRemoteSlot.new(parent, root)
-    return SpidertronRemoteSlot:super(Slot.new(parent, root,
+---@protected
+---@param element LuaGuiElement
+---@return SpidertronRemoteSlot
+function SpidertronRemoteSlot.new(element)
+    return SpidertronRemoteSlot:super(Slot.new(element,
                                                { SpidertronRemoteButton,
                                                  SpidertronRemoteCountOverlay,
                                                  SpidertronRemoteDimOverlay,
                                                  SpidertronRemotePlanetOverlay }))
 end
 
-function SpidertronRemoteSlot:initilize()
-    SpidertronRemoteSlot:super().initilize(self)
+function SpidertronRemoteSlot:initialize()
+    SpidertronRemoteSlot:super().initialize(self)
     self:setControls({ [Pick] = function() self:pick() end })
 
     local loadedSpidertronRemote = self:loadSpidertronRemote()

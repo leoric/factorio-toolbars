@@ -3,7 +3,9 @@
 ---@field _elementIndex string
 GuiEvent = Object:extendAs("gui.GuiEvent")
 
+---@public
 ---@param data EventData
+---@return GuiEvent
 function GuiEvent.new(data)
     local this = GuiEvent:super(Object.new())
     this._data = data

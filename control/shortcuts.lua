@@ -6,5 +6,9 @@ script.on_event(defines.events.on_lua_shortcut, function(event)
         Player.get(event.player_index):createToolbar()
     elseif event.prototype_name == Toolbars.name .. "_toggle-toolbars" then
         Player.get(event.player_index):toggleToolbars()
+    elseif event.prototype_name == Toolbars.name .. "_export-all-toolbars" then
+        Player.get(event.player_index):exportAllToolbars()
+    elseif event.prototype_name == Toolbars.name .. "_import-all-toolbars" then
+        Player.get(event.player_index):importAllToolbars()
     end
 end)
